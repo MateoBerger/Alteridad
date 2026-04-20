@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alteridad e Interdependencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e12;
+  --surface: #16161e;
+  --surface2: #1e1e2a;
+  --border: #2a2a3a;
+  --accent: #c8a96e;
+  --accent2: #7c9bb5;
+  --accent3: #a67c8a;
+  --text: #e8e4da;
+  --text-muted: #8a8a9a;
+  --green: #5a9e7a;
+  --red: #c26e6e;
+  --sidebar-w: 210px;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ═══ SIDEBAR ═══ */
+#sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+.sidebar-header {
+  padding: 1.5rem 1.2rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+}
+.sidebar-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+.sidebar-author {
+  font-size: 0.7rem;
+  color: var(--accent3);
+  font-style: italic;
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 500;
+  padding: 0.75rem 1.2rem;
+  text-align: left;
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
+.nav-btn:hover { color: var(--text); background: rgba(200,169,110,0.05); }
+.nav-btn.active { color: var(--accent); border-left-color: var(--accent); background: rgba(200,169,110,0.07); }
+.nav-icon { font-size: 1rem; flex-shrink: 0; }
+
+/* ═══ MAIN ═══ */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+}
+.section { display:none; padding: 2rem 2rem; max-width: 960px; }
+.section.active { display:block; }
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+}
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ═══ HIGHLIGHT ═══ */
+em { color: var(--accent); font-style: normal; font-weight: 600; }
+strong { color: var(--text); }
+.hl { color: var(--accent); font-weight: 600; }
+.hl2 { color: var(--accent2); font-weight: 600; }
+.hl3 { color: var(--accent3); font-weight: 600; }
+
+/* ═══ CONCEPT CARDS (replaces table) ═══ */
+.concept-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.cc-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.4rem;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+.cc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--accent);
+  font-weight: 700;
+  flex: 1;
+}
+.cc-author-tag {
+  font-size: 0.72rem;
+  background: rgba(124,155,181,0.15);
+  color: var(--accent2);
+  border: 1px solid rgba(124,155,181,0.3);
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+}
+.cc-toggle { color: var(--accent); font-size: 1rem; transition: transform 0.25s; }
+.cc-toggle.open { transform: rotate(180deg); }
+.cc-body { display: none; padding: 1.4rem; }
+.cc-body.open { display: block; }
+
+.cc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 640px) { .cc-grid { grid-template-columns: 1fr; } }
+
+.cc-field {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+}
+.cc-field.full { grid-column: 1/-1; }
+.cc-field-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent2);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.cc-field-content {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+.cc-field-content ul { padding-left: 1.1rem; }
+.cc-field-content li { margin-bottom: 0.2rem; }
+.cc-field-content li::marker { color: var(--accent); }
+
+.key-box {
+  background: rgba(200,169,110,0.1);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  margin-top: 0.8rem;
+  font-weight: 500;
+}
+
+/* ═══ CARDS ═══ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+}
+
+/* ═══ INNER TABS ═══ */
+.inner-tabs { display:flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.inner-tab {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 0.4rem 1rem;
+  color: var(--text-muted); font-size: 0.82rem; cursor: pointer;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.inner-tab.active, .inner-tab:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.inner-panel { display:none; }
+.inner-panel.active { display:block; }
+
+/* ═══ QUIZ ═══ */
+.quiz-question {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1.4rem;
+}
+.quiz-question p { font-weight: 500; margin-bottom: 1rem; line-height: 1.65; }
+.quiz-option {
+  display: block; width: 100%; text-align: left;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.65rem 1rem;
+  margin-bottom: 0.45rem; cursor: pointer; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+  transition: all 0.2s;
+}
+.quiz-option:hover { border-color: var(--accent2); background: rgba(124,155,181,0.08); }
+.quiz-option.correct { background: rgba(90,158,122,0.18); border-color: var(--green); color: #7ecfa4; }
+.quiz-option.wrong { background: rgba(194,110,110,0.18); border-color: var(--red); color: #e08080; }
+.quiz-explanation {
+  margin-top: 0.8rem; padding: 0.8rem 1rem;
+  background: rgba(200,169,110,0.07); border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.86rem; color: var(--text); display:none; line-height: 1.65;
+}
+
+/* ═══ DESARROLLO ═══ */
+.dev-question { margin-bottom: 2.5rem; }
+.dev-question h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.05rem;
+  color: var(--accent); margin-bottom: 0.5rem;
+}
+.dev-context {
+  background: var(--surface2); border-left: 3px solid var(--accent2);
+  padding: 0.8rem 1rem; margin-bottom: 0.8rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic; font-size: 0.86rem; color: var(--text-muted); line-height: 1.65;
+}
+textarea.dev-input {
+  width: 100%; min-height: 130px; padding: 0.9rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  resize: vertical; line-height: 1.6; transition: border-color 0.2s;
+}
+textarea.dev-input:focus { outline:none; border-color: var(--accent2); }
+.btn-corregir {
+  margin-top: 0.6rem; padding: 0.55rem 1.3rem;
+  background: var(--accent); color: var(--bg);
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif; font-weight: 600;
+  font-size: 0.86rem; cursor: pointer; transition: opacity 0.2s;
+}
+.btn-corregir:hover { opacity: 0.85; }
+.btn-corregir:disabled { opacity: 0.5; cursor: not-allowed; }
+.ai-feedback {
+  margin-top: 1rem; padding: 1.1rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: 0.87rem; display:none;
+}
+.ai-feedback.visible { display:block; }
+.feedback-score { font-size: 1.4rem; font-family: 'Playfair Display', serif; color: var(--accent); font-weight: 700; margin-bottom: 0.5rem; }
+.feedback-section { margin-bottom: 0.8rem; }
+.feedback-section h4 { color: var(--accent2); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+
+/* ═══ FLASHCARDS ═══ */
+.flashcard-area { perspective: 1200px; }
+.flashcard {
+  width: 100%; min-height: 210px; position: relative;
+  transform-style: preserve-3d; transition: transform 0.55s;
+  cursor: pointer; margin-bottom: 0.8rem;
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back {
+  position: absolute; width: 100%; min-height: 210px;
+  backface-visibility: hidden; border-radius: var(--radius);
+  padding: 1.8rem; display: flex; align-items: center;
+  justify-content: center; flex-direction: column; text-align: center;
+}
+.flashcard-front { background: var(--surface); border: 1px solid var(--border); }
+.flashcard-back {
+  background: linear-gradient(135deg, rgba(200,169,110,0.13), rgba(124,155,181,0.13));
+  border: 1px solid var(--accent); transform: rotateY(180deg);
+}
+.flashcard-front .tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.7rem; }
+.flashcard-front .q { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--text); line-height: 1.5; }
+.flashcard-back .a { font-size: 0.9rem; color: var(--text); line-height: 1.7; }
+.flashcard-nav { display:flex; gap: 0.7rem; align-items: center; justify-content: center; margin-top: 0.5rem; }
+.fc-btn {
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); padding: 0.45rem 1.1rem; border-radius: 20px;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.83rem;
+  transition: all 0.2s;
+}
+.fc-btn:hover { border-color: var(--accent); color: var(--accent); }
+.fc-counter { color: var(--text-muted); font-size: 0.82rem; }
+
+/* ═══ RESUMEN ═══ */
+.summary-block { margin-bottom: 2rem; }
+.summary-block h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem;
+  color: var(--accent); margin-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border); padding-bottom: 0.35rem;
+}
+.summary-block p, .summary-block li { color: var(--text); line-height: 1.75; margin-bottom: 0.4rem; }
+.summary-block ul { padding-left: 1.2rem; }
+.summary-block li::marker { color: var(--accent); }
+.key-idea {
+  background: rgba(200,169,110,0.09); border-left: 3px solid var(--accent);
+  padding: 0.65rem 1rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 0.5rem 0; font-size: 0.88rem;
+}
+
+/* ═══ NO ENTENDÍ ═══ */
+.ne-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.4rem; overflow: hidden; }
+.ne-header { display:flex; align-items:center; gap:0.8rem; padding: 0.9rem 1.2rem; background: var(--surface2); border-bottom: 1px solid var(--border); cursor:pointer; }
+.ne-title { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--accent); font-weight:700; flex:1; }
+.ne-toggle { color:var(--accent); transition:transform 0.25s; }
+.ne-toggle.open { transform:rotate(180deg); }
+.ne-body { display:none; padding: 1.2rem; }
+.ne-body.open { display:block; }
+.ne-block { margin-bottom: 1rem; }
+.ne-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent2); font-weight:600; margin-bottom:0.4rem; }
+.ne-text { font-size:0.88rem; line-height:1.75; color:var(--text); }
+.ne-analogy { background:rgba(124,155,181,0.08); border-left:3px solid var(--accent2); padding:0.6rem 1rem; border-radius:0 8px 8px 0; font-size:0.87rem; margin-bottom:1rem; }
+.faq-item { margin-bottom:0.7rem; padding:0.7rem; background:var(--surface2); border-radius:8px; }
+.faq-q { font-weight:600; font-size:0.86rem; color:var(--accent); margin-bottom:0.25rem; }
+.faq-a { font-size:0.86rem; line-height:1.65; }
+
+/* ═══ QUIZ SCORE ═══ */
+#quiz-score-bar {
+  position: sticky; bottom: 0;
+  background: rgba(14,14,18,0.95); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+  padding: 0.55rem 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
+  font-size: 0.82rem; color: var(--text-muted);
+}
+#quiz-score-bar span { color: var(--accent); font-weight: 600; }
+
+/* ═══ LOADER ═══ */
+.loading-dots { display:inline-flex; gap: 4px; align-items: center; }
+.loading-dots span { width:5px; height:5px; border-radius:50%; background:var(--accent); animation:blink 1.2s infinite; }
+.loading-dots span:nth-child(2){animation-delay:.2s}
+.loading-dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 700px) {
+  #sidebar { width: 100%; min-height:auto; position:relative; flex-direction:row; flex-wrap:wrap; border-right:none; border-bottom:1px solid var(--border); }
+  #sidebar .sidebar-header { width:100%; }
+  .nav-btn { border-left:none; border-bottom:3px solid transparent; padding:0.6rem 0.8rem; font-size:0.78rem; }
+  .nav-btn.active { border-bottom-color:var(--accent); border-left:none; }
+  #main { margin-left:0; }
+  body { flex-direction: column; }
+}
+
+/* ═══ MAPA MENTAL ═══ */
+#mindmap-svg { width:100%; height:auto; min-height:380px; background:var(--surface2); border-radius:12px; border:1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Alteridad e Interdependencia</div>
+    <div class="sidebar-sub">Según Lévinas, Lacan, Garcés y otros.</div>
+    <div class="sidebar-author">por Mateo Berger A.</div>
+  </div>
+  <button class="nav-btn active" onclick="showSection('conceptos',this)"><span class="nav-icon">📚</span> Conceptos</button>
+  <button class="nav-btn" onclick="showSection('resumen',this)"><span class="nav-icon">📋</span> Resumen</button>
+  <button class="nav-btn" onclick="showSection('desarrollo',this)"><span class="nav-icon">✍️</span> Desarrollo</button>
+  <button class="nav-btn" onclick="showSection('alternativas',this)"><span class="nav-icon">🎯</span> Alternativas</button>
+  <button class="nav-btn" onclick="showSection('noentendi',this)"><span class="nav-icon">💡</span> No entendí</button>
+  <button class="nav-btn" onclick="showSection('flashcards',this)"><span class="nav-icon">🃏</span> Flashcards</button>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<div id="main">
+
+<!-- ════════════════════════════════════ -->
+<!--  SEC 1: CONCEPTOS                   -->
+<!-- ════════════════════════════════════ -->
+<section id="sec-conceptos" class="section active">
+  <h1 class="section-title">Entender los Conceptos</h1>
+  <p class="section-subtitle">Tarjetas expandibles · Mapa mental · Autores · Vida real</p>
+
+  <div class="inner-tabs">
+    <button class="inner-tab active" onclick="showInner('conceptos','cards')">Conceptos</button>
+    <button class="inner-tab" onclick="showInner('conceptos','mapa')">Mapa Mental</button>
+    <button class="inner-tab" onclick="showInner('conceptos','autores')">Autores</button>
+    <button class="inner-tab" onclick="showInner('conceptos','vidareal')">Vida Real</button>
+  </div>
+
+  <!-- CONCEPT CARDS -->
+  <div id="conceptos-cards" class="inner-panel active" id="conceptos-cards"></div>
+
+  <!-- MAPA MENTAL -->
+  <div id="conceptos-mapa" class="inner-panel">
+    <div class="card">
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem">Haz clic en los nodos para ver información.</p>
+      <svg id="mindmap-svg" viewBox="0 0 860 480" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#2a2a3a" stroke-width="1.5" fill="none">
+          <line x1="430" y1="240" x2="220" y2="90"/>
+          <line x1="430" y1="240" x2="640" y2="90"/>
+          <line x1="430" y1="240" x2="110" y2="240"/>
+          <line x1="430" y1="240" x2="750" y2="240"/>
+          <line x1="430" y1="240" x2="220" y2="390"/>
+          <line x1="430" y1="240" x2="640" y2="390"/>
+          <line x1="220" y1="90" x2="640" y2="90" stroke-dasharray="4,4" stroke="#3a3a5a"/>
+          <line x1="640" y1="90" x2="750" y2="240" stroke-dasharray="4,4" stroke="#3a3a5a"/>
+          <line x1="110" y1="240" x2="220" y2="390" stroke-dasharray="4,4" stroke="#3a3a5a"/>
+        </g>
+        <g transform="translate(430,240)" style="cursor:pointer" onclick="showMm('alteridad')">
+          <rect x="-72" y="-26" width="144" height="52" rx="11" fill="#c8a96e" opacity=".92"/>
+          <text x="0" y="-5" text-anchor="middle" fill="#0e0e12" font-family="Playfair Display,serif" font-size="13" font-weight="700">ALTERIDAD</text>
+          <text x="0" y="13" text-anchor="middle" fill="#0e0e12" font-family="DM Sans,sans-serif" font-size="10">Concepto central</text>
+        </g>
+        <g transform="translate(220,90)" style="cursor:pointer" onclick="showMm('levinas')">
+          <rect x="-68" y="-25" width="136" height="50" rx="10" fill="#7c9bb5" opacity=".88"/>
+          <text x="0" y="-5" text-anchor="middle" fill="#0e0e12" font-family="Playfair Display,serif" font-size="12" font-weight="700">LÉVINAS</text>
+          <text x="0" y="12" text-anchor="middle" fill="#0e0e12" font-family="DM Sans,sans-serif" font-size="10">Ética como 1ª filosofía</text>
+        </g>
+        <g transform="translate(640,90)" style="cursor:pointer" onclick="showMm('nosotros')">
+          <rect x="-68" y="-25" width="136" height="50" rx="10" fill="#5a9e7a" opacity=".88"/>
+          <text x="0" y="-5" text-anchor="middle" fill="#0e0e12" font-family="Playfair Display,serif" font-size="12" font-weight="700">NOSOTROS</text>
+          <text x="0" y="12" text-anchor="middle" fill="#0e0e12" font-family="DM Sans,sans-serif" font-size="10">Garcés — vida en común</text>
+        </g>
+        <g transform="translate(110,240)" style="cursor:pointer" onclick="showMm('individualismo')">
+          <rect x="-66" y="-25" width="132" height="50" rx="10" fill="#c26e6e" opacity=".88"/>
+          <text x="0" y="-5" text-anchor="middle" fill="#fff" font-family="Playfair Display,serif" font-size="11" font-weight="700">INDIVIDUALISMO</text>
+          <text x="0" y="12" text-anchor="middle" fill="#fff" font-family="DM Sans,sans-serif" font-size="10">vs. comunidad</text>
+        </g>
+        <g transform="translate(750,240)" style="cursor:pointer" onclick="showMm('han')">
+          <rect x="-66" y="-25" width="132" height="50" rx="10" fill="#a67c8a" opacity=".88"/>
+          <text x="0" y="-5" text-anchor="middle" fill="#fff" font-family="Playfair Display,serif" font-size="11" font-weight="700">BYUNG-CHUL HAN</text>
+          <text x="0" y="12" text-anchor="middle" fill="#fff" font-family="DM Sans,sans-serif" font-size="10">Otro desaparece</text>
+        </g>
+        <g transform="translate(220,390)" style="cursor:pointer" onclick="showMm('responsabilidad')">
+          <rect x="-68" y="-25" width="136" height="50" rx="10" fill="#7c9bb5" opacity=".72"/>
+          <text x="0" y="-5" text-anchor="middle" fill="#fff" font-family="Playfair Display,serif" font-size="11" font-weight="700">RESPONSABILIDAD</text>
+          <text x="0" y="12" text-anchor="middle" fill="#fff" font-family="DM Sans,sans-serif" font-size="10">Infinita y asimétrica</text>
+        </g>
+        <g transform="translate(640,390)" style="cursor:pointer" onclick="showMm('pena')">
+          <rect x="-66" y="-25" width="132" height="50" rx="10" fill="#c8a96e" opacity=".62"/>
+          <text x="0" y="-5" text-anchor="middle" fill="#0e0e12" font-family="Playfair Display,serif" font-size="12" font-weight="700">CARLOS PEÑA</text>
+          <text x="0" y="12" text-anchor="middle" fill="#0e0e12" font-family="DM Sans,sans-serif" font-size="10">Política de identidad</text>
+        </g>
+        <text x="320" y="158" fill="#6a6a8a" font-size="10" font-family="DM Sans,sans-serif" transform="rotate(-28,320,158)">funda</text>
+        <text x="538" y="158" fill="#6a6a8a" font-size="10" font-family="DM Sans,sans-serif" transform="rotate(28,538,158)">exige</text>
+        <text x="255" y="240" fill="#c26e6e" font-size="10" font-family="DM Sans,sans-serif">← opone</text>
+        <text x="605" y="228" fill="#6a6a8a" font-size="10" font-family="DM Sans,sans-serif">elimina →</text>
+      </svg>
+      <div id="mm-info" style="margin-top:1rem;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:none;font-size:0.88rem;line-height:1.7;"></div>
+    </div>
+  </div>
+
+  <!-- AUTORES -->
+  <div id="conceptos-autores" class="inner-panel">
+    <div class="card">
+      <div class="card-title">Emmanuel Lévinas <span style="font-size:0.8rem;color:var(--text-muted)">(1906–1995)</span></div>
+      <p><em>Postura filosófica:</em> Fenomenólogo ético lituano-francés. Sobreviviente del Holocausto nazi — su experiencia de campo de concentración moldeó radicalmente su pensamiento.</p>
+      <ul style="padding-left:1.2rem;margin-top:0.7rem">
+        <li>La <em>ética es la "filosofía primera"</em>: antecede a la ontología.</li>
+        <li>El <em>rostro</em> del otro genera <em>responsabilidad infinita y asimétrica</em>.</li>
+        <li>El otro es <em>absolutamente otro</em>: alteridad irreductible, no reducible a mis categorías.</li>
+        <li><em>"No me mates"</em> es el mandato originario que emerge del rostro.</li>
+        <li><em>Responsabilidad por sustitución</em>: soy responsable incluso del otro.</li>
+      </ul>
+      <div class="key-box">Cita: <em>"El otro como rostro, testimonio extraordinario de mi libertad, que me ordena asumir la alteridad hasta el infinito."</em></div>
+      <p style="margin-top:0.7rem;font-size:0.86rem;color:var(--text-muted)"><strong>En la prueba:</strong> Citar cuando la pregunta involucre ética, responsabilidad, el rostro o filosofía primera. Siempre mencionar que <em>invierte la jerarquía ontología/ética</em>.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Marina Garcés <span style="font-size:0.8rem;color:var(--text-muted)">(1973–)</span></div>
+      <p><em>Postura filosófica:</em> Filósofa española, pensadora del bien común y la <em>vida compartida</em>. Crítica del individualismo y la <em>"privatización de la existencia"</em>.</p>
+      <ul style="padding-left:1.2rem;margin-top:0.7rem">
+        <li>El <em>"nosotros" es un "yo dilatado"</em>: nunca un sujeto genuinamente colectivo.</li>
+        <li>La <em>condición relacional es constitutiva</em>: "imposible ser solo un individuo".</li>
+        <li>La <em>finitud del cuerpo</em> es base de la interdependencia y solidaridad.</li>
+        <li><em>"Vida en común"</em> = conjunto de vínculos materiales y simbólicos que hacen posible existir.</li>
+        <li>La modernidad ha construido sociedades sobre la <em>desvinculación</em>.</li>
+      </ul>
+      <div class="key-box">Cita: <em>"Donde no llega mi mano, llega la de otro."</em></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Byung-Chul Han <span style="font-size:0.8rem;color:var(--text-muted)">(1959–)</span></div>
+      <p><em>Postura filosófica:</em> Filósofo surcoreano-alemán. Diagnóstico de la <em>sociedad del rendimiento</em>, narcisismo digital y <em>desaparición del otro</em>.</p>
+      <ul style="padding-left:1.2rem;margin-top:0.7rem">
+        <li>En la era digital, <em>el otro desaparece</em>: solo encontramos versiones de nosotros mismos.</li>
+        <li>Las redes sociales generan <em>"transparencia"</em>: todo se muestra, nada queda misterioso.</li>
+        <li>La <em>sociedad del rendimiento</em> produce sujetos que se autoexplotan.</li>
+        <li>El amor y la ética requieren la <em>negatividad del otro</em> (lo diferente, lo incómodo).</li>
+      </ul>
+      <div class="key-box">En la prueba: Conectar con Lévinas — lo que Lévinas propone (encuentro con el otro) es <em>exactamente lo que Han dice que está desapareciendo</em>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Carlos Peña</div>
+      <p><em>Postura filosófica:</em> Filósofo y abogado chileno. Pensador del <em>liberalismo, la identidad y la política contemporánea</em> en Chile y Latinoamérica.</p>
+      <ul style="padding-left:1.2rem;margin-top:0.7rem">
+        <li>Tránsito de la <em>democracia liberal</em> (universalismo) a la <em>política de identidad</em> (particularismo grupal).</li>
+        <li>Riesgo: la política de identidad puede ser un <em>individualismo a escala grupal</em> que destruye el bien común.</li>
+        <li>El universalismo liberal reconoce la <em>igualdad abstracta</em> de todos.</li>
+        <li>Alarma: reivindicar la diferencia puede <em>fragmentar el espacio público</em>.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Jacques Lacan <span style="font-size:0.8rem;color:var(--text-muted)">(1901–1981)</span></div>
+      <p><em>Postura filosófica:</em> Psicoanalista francés. Relee a Freud desde la lingüística estructural de Saussure. Aporte clave: distinción <em>gran Otro / pequeño otro</em>.</p>
+      <ul style="padding-left:1.2rem;margin-top:0.7rem">
+        <li>El sujeto se constituye en el <em>lenguaje (gran Otro)</em>: no somos dueños de nosotros mismos.</li>
+        <li><em>Pequeño otro</em> = semejante imaginario (rivalidad, identificación).</li>
+        <li><em>Gran Otro</em> = orden simbólico (lenguaje, cultura, ley) que me precede y constituye.</li>
+        <li>Hay una dificultad estructural en la coexistencia: el <em>deseo siempre pasa por el Otro</em>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- VIDA REAL -->
+  <div id="conceptos-vidareal" class="inner-panel">
+    <div class="card"><div class="card-title">🌐 Redes sociales y la desaparición del otro (Han)</div><p>Cuando scrolleamos Instagram o TikTok, el <em>algoritmo</em> nos muestra contenido que confirma nuestras creencias. <em>Nunca nos incomoda un verdadero "otro"</em>. Las burbujas de filtro hacen que solo interactuemos con versiones amplificadas del yo. Esto destruye la posibilidad del encuentro levinasiano: si el otro no aparece como <em>genuinamente diferente</em>, no hay llamado ético posible.</p></div>
+    <div class="card"><div class="card-title">👥 Discriminación y el rostro invisibilizado (Lévinas)</div><p>La discriminación racial, de género o por orientación sexual es filosóficamente la <em>negación del rostro del otro</em>: reducimos al otro a una categoría (el inmigrante, la mujer, el gay) y lo dejamos de ver como persona irreductible. Para Lévinas, discriminar es <em>"matar" al otro éticamente</em>: negar su alteridad y hacer de él un objeto manejable.</p></div>
+    <div class="card"><div class="card-title">🏫 Violencia escolar — bullying (Lévinas + Garcés)</div><p>El bullying opera mediante la <em>cosificación del otro</em>: el agredido deja de ser un sujeto con rostro y se convierte en objeto de burla. Desde Lévinas, reconocer el <em>rostro del otro</em> genera una obligación ética que ninguna norma escolar puede sustituir. Desde Garcés: la <em>interdependencia</em> hace que el daño al otro sea también un daño a la comunidad entera.</p></div>
+    <div class="card"><div class="card-title">🌍 Migración en Chile (Lévinas + Peña)</div><p>La reacción xenófoba responde a la lógica del <em>"otro como peligro"</em>. La propuesta levinasiana: el <em>rostro del migrante que sufre</em> me interpela directamente y me impone responsabilidad. La <em>política de identidad</em> (Peña) puede agravar esto: si mi identidad nacional es lo que más importa, el migrante se convierte en pura amenaza, desapareciendo su alteridad.</p></div>
+    <div class="card"><div class="card-title">💼 Éxito individual vs. apoyo colectivo (Garcés)</div><p>La narrativa del emprendedor que <em>"lo logró solo"</em> es el mito del individualismo moderno. Garcés lo desmontaría: ese éxito descansa en el <em>lenguaje que otros crearon</em>, en carreteras construidas por otros, en educación financiada colectivamente. La <em>interdependencia es invisible</em> precisamente porque el individualismo la borra del relato.</p></div>
+    <div class="card"><div class="card-title">🤝 Amistad genuina (Lévinas + Han)</div><p>Una amistad genuina implica reconocer al otro como <em>irreductiblemente otro</em>: no como una extensión de mis gustos ni como alguien que confirma todo lo que pienso. La amistad filosóficamente valiosa incluye la <em>incomodidad de encontrarse con alguien diferente</em>. Han diría que las redes sociales destruyen esa posibilidad al devolvernos solo espejos.</p></div>
+    <div class="card"><div class="card-title">🗳️ Política de identidad en Chile (Peña + Garcés)</div><p>El debate político chileno (feminismo, diversidad sexual, pueblos originarios) muestra la tensión que describe Peña. Por un lado, grupos históricamente oprimidos reclaman <em>reconocimiento legítimo</em>. Por otro, si el debate se cierra solo en la identidad grupal, se fragmenta la posibilidad de un <em>"nosotros" político</em>. El desafío: ¿cómo reconocer la diferencia sin destruir lo común?</p></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ -->
+<!--  SEC 2: RESUMEN                     -->
+<!-- ════════════════════════════════════ -->
+<section id="sec-resumen" class="section">
+  <h1 class="section-title">Resumen Total</h1>
+  <p class="section-subtitle">Todo lo que necesitas dominar antes de la prueba</p>
+
+  <div class="summary-block">
+    <h3>🎯 La pregunta central de esta unidad</h3>
+    <p>¿Qué relación tengo con el otro? ¿El otro es una amenaza, un instrumento, o alguien que <em>me constituye</em> y me obliga éticamente? La filosofía de la alteridad responde: el otro es <em>irreductible a mis categorías</em>, y esa irreductibilidad es el fundamento de la ética.</p>
+    <div class="key-idea">El problema filosófico no es cómo <em>tolero</em> al otro, sino cómo el otro me <em>constituye</em> y me <em>obliga</em>.</div>
+  </div>
+
+  <div class="summary-block">
+    <h3>📌 Conceptos y sus ideas principales</h3>
+    <p><strong>Alteridad:</strong> La condición de ser <em>radicalmente otro</em>. No es simple diferencia: es <em>irreductibilidad</em>. El otro nunca puede ser reducido a mis categorías. Funda la ética.</p>
+    <p><strong>Lévinas — El Rostro:</strong> El rostro no es físico; es la <em>manifestación ética del otro</em> que me dice "no me mates". Genera <em>responsabilidad infinita y asimétrica</em>. <em>Ética como filosofía primera</em>: la relación ética antecede a la ontología.</p>
+    <p><strong>Garcés — Nosotros:</strong> El "nosotros" verdadero no es un <em>"yo dilatado"</em> sino la dimensión compartida de la existencia. Los cuerpos son finitos y se continúan mutuamente. <em>"Imposible ser solo un individuo."</em></p>
+    <p><strong>Lacan — Gran Otro/Pequeño otro:</strong> El <em>gran Otro</em> es el lenguaje y el orden simbólico que me constituye. El <em>pequeño otro</em> es el semejante imaginario.</p>
+    <p><strong>Han:</strong> En la era digital, <em>el otro desaparece</em>. Las redes sociales producen narcisismo y burbujas de confirmación.</p>
+    <p><strong>Peña:</strong> La <em>política de identidad</em> puede ser un individualismo a escala grupal que destruye el universalismo y el bien común.</p>
+  </div>
+
+  <div class="summary-block">
+    <h3>🔗 Relaciones y tensiones importantes</h3>
+    <ul>
+      <li><em>Lévinas vs. Individualismo:</em> El individualismo hace del yo el punto de partida; Lévinas hace del otro el punto de partida.</li>
+      <li><em>Garcés y Lévinas se complementan:</em> Lévinas da el fundamento ético (responsabilidad por el rostro), Garcés da el fundamento social (interdependencia, vida en común).</li>
+      <li><em>Han amplía a Lévinas al presente:</em> Lo que Lévinas propone es exactamente lo que Han dice que la modernidad digital destruye.</li>
+      <li><em>Peña y Han convergen:</em> Ambos ven cierre frente al otro (digital o político), aunque por razones distintas.</li>
+      <li><em>Lacan y Lévinas:</em> Para Lacan, el gran Otro es el lenguaje que me constituye internamente. Para Lévinas, el Otro es la persona que me interpela desde afuera.</li>
+    </ul>
+  </div>
+
+  <div class="summary-block">
+    <h3>✅ Ideas clave para responder bien</h3>
+    <ul>
+      <li>Siempre <em>relacionar conceptos entre sí</em>, no explicarlos aislados.</li>
+      <li>Usar <em>citas o ideas concretas</em> de los autores (no solo mencionar el nombre).</li>
+      <li>El argumento de Lévinas tiene 3 pasos: (1) el <em>rostro</em>, (2) la <em>responsabilidad infinita</em>, (3) la <em>ética como filosofía primera</em>.</li>
+      <li>Garcés tiene 2 argumentos: (1) el <em>nosotros como yo dilatado fracasa</em>, (2) la <em>finitud del cuerpo</em> funda interdependencia real.</li>
+      <li>Para aplicar a casos reales: identificar qué concepto aplica, quién lo propone, y qué consecuencias tiene.</li>
+    </ul>
+  </div>
+
+  <div class="summary-block">
+    <h3>⚠️ Errores frecuentes a evitar</h3>
+    <ul>
+      <li>Confundir <em>"rostro" con cara física</em> en Lévinas.</li>
+      <li>Decir que Lévinas rechaza la ontología (no: la <em>subordina</em> a la ética).</li>
+      <li>Creer que la vida en común de Garcés es colectivismo.</li>
+      <li>Confundir el <em>gran Otro (Lacan)</em> con el otro de Lévinas.</li>
+      <li>No definir los términos antes de usarlos en un desarrollo.</li>
+    </ul>
+  </div>
+
+  <div class="summary-block">
+    <h3>🧠 Mini esquema de memorización</h3>
+    <div style="font-family:'DM Mono',monospace;background:var(--surface2);padding:1.2rem;border-radius:10px;font-size:0.82rem;color:var(--text);line-height:2;">
+      ALTERIDAD<br>
+      ├── LÉVINAS → Rostro → Responsabilidad → Ética 1ª<br>
+      ├── GARCÉS → Nosotros → Interdependencia → Vida en común<br>
+      ├── LACAN → Gran Otro (lenguaje) / Pequeño otro (semejante)<br>
+      ├── HAN → Digital → Desaparece el otro → Crisis ética<br>
+      └── PEÑA → Política identidad → Individualismo grupal → ¿Bien común?<br><br>
+      OPUESTO: INDIVIDUALISMO → yo dilatado → "nosotros" artificial
+    </div>
+  </div>
+
+  <div class="summary-block">
+    <h3>📝 Conclusión general</h3>
+    <p>La filosofía de la alteridad nos dice que <em>no somos islas</em>. El otro no es solo alguien que "está ahí": es lo que <em>me constituye</em> como sujeto moral, social y lingüístico. Desde Lévinas (el <em>rostro me impone responsabilidad</em>), pasando por Garcés (los <em>cuerpos se continúan mutuamente</em>), hasta Han (la <em>era digital destruye el encuentro con el otro</em>) y Peña (la <em>política de identidad fragmenta lo común</em>), el problema central es el mismo: ¿cómo construimos un "nosotros" que no sea solo un yo multiplicado?</p>
+    <div class="key-idea">La respuesta filosófica: reconociendo que el otro, <em>antes de ser problema, es constitución</em>. Y que la ética comienza exactamente ahí.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ -->
+<!--  SEC 3: DESARROLLO                  -->
+<!-- ════════════════════════════════════ -->
+<section id="sec-desarrollo" class="section">
+  <h1 class="section-title">Práctica de Desarrollo</h1>
+  <p class="section-subtitle">Preguntas abiertas tipo prueba real · Corrector IA</p>
+  <div id="dev-container"></div>
+</section>
+
+<!-- ════════════════════════════════════ -->
+<!--  SEC 4: ALTERNATIVAS                -->
+<!-- ════════════════════════════════════ -->
+<section id="sec-alternativas" class="section">
+  <h1 class="section-title">Preguntas de Alternativas</h1>
+  <p class="section-subtitle">Difíciles · Trampas conceptuales · Con explicación</p>
+  <div id="quiz-container"></div>
+  <div id="quiz-score-bar" style="display:none">
+    Puntaje: <span id="quiz-score">0</span> / <span id="quiz-total">0</span> correctas
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ -->
+<!--  SEC 5: NO ENTENDÍ                  -->
+<!-- ════════════════════════════════════ -->
+<section id="sec-noentendi" class="section">
+  <h1 class="section-title">¿No entendiste algo?</h1>
+  <p class="section-subtitle">Doble explicación · Analogías · Preguntas frecuentes · Para cada concepto</p>
+  <div id="ne-container"></div>
+</section>
+
+<!-- ════════════════════════════════════ -->
+<!--  SEC 6: FLASHCARDS                  -->
+<!-- ════════════════════════════════════ -->
+<section id="sec-flashcards" class="section">
+  <h1 class="section-title">Flashcards</h1>
+  <p class="section-subtitle">Haz clic para voltear · Navega · Mezcla aleatoria</p>
+  <div class="flashcard-area">
+    <div class="flashcard" id="current-card" onclick="flipCard()">
+      <div class="flashcard-front">
+        <div class="tag" id="fc-tag">CONCEPTO</div>
+        <div class="q" id="fc-question">...</div>
+      </div>
+      <div class="flashcard-back">
+        <div class="a" id="fc-answer">...</div>
+      </div>
+    </div>
+  </div>
+  <div class="flashcard-nav">
+    <button class="fc-btn" onclick="prevCard()">← Anterior</button>
+    <span class="fc-counter"><span id="fc-current">1</span> / <span id="fc-total">1</span></span>
+    <button class="fc-btn" onclick="nextCard()">Siguiente →</button>
+    <button class="fc-btn" onclick="shuffleCards()">🔀 Mezclar</button>
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  localStorage.setItem('lastSection', id);
+}
+function showInner(sec, panel) {
+  document.querySelectorAll(`#sec-${sec} .inner-panel`).forEach(p => p.classList.remove('active'));
+  document.querySelectorAll(`#sec-${sec} .inner-tab`).forEach(t => t.classList.remove('active'));
+  document.getElementById(`${sec}-${panel}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// CONCEPT CARDS DATA
+// ═══════════════════════════════════════
+const conceptsData = [
+  {
+    title: 'Alteridad',
+    author: 'Lévinas, Lacan, Han',
+    fields: [
+      { label:'Definición', full:true, content:'La <em>condición de ser radicalmente otro</em>. Es la cualidad que hace que el otro no sea reducible a mi propio mundo ni a mis categorías. Reconocer al otro como genuinamente otro, no como un objeto ni como una extensión de mí.' },
+      { label:'Explicación profunda', content:'La alteridad implica que el otro siempre <em>excede mi comprensión</em>. No puedo reducirlo a categorías conocidas. Para Lévinas, el rostro del otro irrumpe en mi mundo y me llama a la responsabilidad. El otro no es solo "diferente" a mí: es <em>radicalmente exterior, inquietante</em>, y esa exterioridad es constitutiva de lo ético. La alteridad es <em>irreductible</em>: nunca podré conocer al otro del todo, y eso es precisamente lo que lo hace valioso.' },
+      { label:'Por qué importa filosóficamente', content:'Permite fundar la ética en algo distinto al yo. Si todo parte del yo, la moral se vuelve <em>solipsista</em>. La alteridad rompe esa lógica: el otro, antes que yo, me impone deberes. Además, cuestiona la metafísica occidental centrada en el Ser (<em>ontología</em>) y propone que la relación ética es más fundamental.' },
+      { label:'Relación con otros conceptos', content:'<ul><li>Sin alteridad no hay <em>responsabilidad ética</em> (Lévinas).</li><li>Sin alteridad el "nosotros" es solo un <em>"yo dilatado"</em> (Garcés).</li><li>Es condición de posibilidad de la <em>comunidad real</em>.</li><li>Se relaciona con <em>identidad</em>: yo me construyo en relación al otro (Taylor).</li></ul>' },
+      { label:'Diferencias con conceptos parecidos', content:'No confundir con <em>diversidad</em> (descriptiva, sociológica) ni con <em>tolerancia</em> (que puede ser paternalista). La alteridad es filosófica y ética: exige <em>reconocimiento activo</em>, no solo aceptación pasiva.' },
+      { label:'Errores comunes', content:'<ul><li>Creer que alteridad = "respetar las diferencias" (es más profundo: implica <em>responsabilidad</em>).</li><li>Confundirla con <em>empatía</em> (la empatía puede ser proyección; la alteridad reconoce al otro como irreductible).</li><li>Pensar que elimina el conflicto.</li></ul>' },
+      { label:'Ejemplo real', full:true, content:'Un inmigrante llega al país. La alteridad no es tolerar que exista, sino reconocer que su sufrimiento, historia e identidad me <em>interpelan directamente</em> y me obligan a responder.' },
+      { label:'Idea clave para la prueba', full:true, content:'<em>La alteridad es la condición de que el otro nunca sea reducible a mí, y eso funda la ética.</em> No es solo diferencia: es llamado a la responsabilidad.' },
+    ]
+  },
+  {
+    title: 'El Rostro (Lévinas)',
+    author: 'Lévinas',
+    fields: [
+      { label:'Definición', full:true, content:'El <em>"rostro" (visage)</em> no es la cara física, sino la <em>manifestación ética del otro</em> que me interpela y me prohíbe reducirlo a objeto. Es la expresión de la vulnerabilidad y exigencia del otro.' },
+      { label:'Explicación profunda', content:'Para Lévinas el rostro dice <em>"no me mates", "no me ignores", "soy irreductible"</em>. No es un fenómeno visual sino ético. El rostro del hambriento me exige justicia <em>antes de que yo razone</em> sobre ella. Esto es el <em>"trastorno ético del ser"</em>: el rostro sacude mi mundo centrado en mí mismo.' },
+      { label:'Por qué importa filosóficamente', content:'Invierte el orden tradicional: en filosofía occidental primero ontología y luego ética. Lévinas dice que la ética viene primero: la <em>relación con el rostro precede a cualquier teoría</em>. Esto es la "ética como filosofía primera".' },
+      { label:'Errores comunes', content:'<ul><li>Creer que el "rostro" es literal (la cara). El rostro puede manifestarse en una voz, texto, llanto.</li><li>Creer que se puede <em>elegir</em> si responder o no: para Lévinas la responsabilidad es <em>anterior a mi libertad</em>.</li></ul>' },
+      { label:'Ejemplo real', full:true, content:'Scroll por redes sociales: vemos fotos de personas en conflictos. Si las vemos como cifras, ignoramos el "rostro". Si sentimos que nos interpelan personalmente, eso es la lógica levinasiana.' },
+      { label:'Idea clave para la prueba', full:true, content:'<em>"El rostro me ordena asumir la alteridad hasta el infinito."</em> Es el lugar donde nace la ética, antes que cualquier decisión racional.' },
+    ]
+  },
+  {
+    title: 'Responsabilidad Ética',
+    author: 'Lévinas, Garcés',
+    fields: [
+      { label:'Definición', full:true, content:'Deber hacia el otro que <em>no nace de un contrato ni de una elección racional</em>, sino del encuentro con el rostro del otro. Para Lévinas es <em>infinita y asimétrica</em>: soy responsable del otro incluso antes de haberlo elegido.' },
+      { label:'Explicación profunda', content:'La responsabilidad levinasiana no es recíproca. No es "tú me cuidas, yo te cuido". El otro me exige, y yo respondo, <em>sin esperar reciprocidad</em>. Lévinas dice incluso que soy <em>responsable de la responsabilidad del otro</em>. La ética es una exigencia sin fondo.' },
+      { label:'Por qué importa', content:'Rompe con la ética <em>contractualista</em> (Rousseau, Kant) en la que los deberes nacen de acuerdos racionales. Para Lévinas, la ética surge del <em>encuentro concreto</em>, no de principios abstractos.' },
+      { label:'Errores comunes', content:'<ul><li>Creer que la responsabilidad tiene límites claros (para Lévinas es <em>"hasta el infinito"</em>).</li><li>Confundirla con <em>solidaridad voluntaria</em>: no es solo cuando quiero ayudar, es un llamado que me precede.</li></ul>' },
+      { label:'Ejemplo real', full:true, content:'Una persona ve a alguien caído en la calle. La responsabilidad ética no espera calcular si "conviene" ayudar: la <em>presencia del otro que sufre genera la obligación directamente</em>.' },
+      { label:'Idea clave', full:true, content:'<em>La responsabilidad ética es previa a la decisión: el otro me hace responsable antes de que yo elija serlo.</em>' },
+    ]
+  },
+  {
+    title: 'Nosotros / Vida en común',
+    author: 'Marina Garcés',
+    fields: [
+      { label:'Definición', full:true, content:'El <em>"nosotros" no es simplemente la suma de "yos"</em>. Para Garcés, es la dimensión compartida de la existencia: las relaciones materiales y simbólicas que hacen posible la vida humana.' },
+      { label:'Explicación profunda', content:'Garcés distingue: (1) el <em>"nosotros" como "yo dilatado"</em> — primera persona amplificada, que arrastra solipsismo — y (2) el <em>"nosotros" como dimensión del mundo compartido</em>, basada en la finitud de los cuerpos. "Donde no llega mi mano, llega la de otro." Esta segunda es la que propone.' },
+      { label:'Por qué importa', content:'Cuestiona el <em>individualismo moderno</em> en su raíz. Si el individuo es la unidad básica irreductible, el nosotros siempre parece artificial. Pero Garcés muestra que eso es una abstracción: <em>"Lo dice nuestro cuerpo, su hambre, el vacío del ombligo."</em>' },
+      { label:'Diferencias con conceptos parecidos', content:'No es lo mismo que <em>colectivismo</em> (que puede suprimir la individualidad) ni que <em>identidad nacional</em> (que puede ser excluyente). La "vida en común" de Garcés <em>preserva la singularidad dentro del vínculo</em>.' },
+      { label:'Errores comunes', content:'<ul><li>Creer que "nosotros" es solo un grupo cerrado (familia, nación).</li><li>Reducirlo a la suma aritmética de individuos.</li><li>Confundirlo con unanimidad: la vida en común <em>incluye el conflicto y la diferencia</em>.</li></ul>' },
+      { label:'Idea clave', full:true, content:'<em>"El ser humano no puede decir yo sin que resuene, al mismo tiempo, un nosotros."</em> El nosotros no es opcional: es constitutivo.' },
+    ]
+  },
+  {
+    title: 'Interdependencia',
+    author: 'Garcés',
+    fields: [
+      { label:'Definición', full:true, content:'Condición por la cual los seres humanos se <em>necesitan mutuamente para existir</em>, no solo económica o socialmente, sino en el nivel más básico de la vida: corporal, lingüístico, afectivo y simbólico.' },
+      { label:'Explicación profunda', content:'Garcés lo formula radicalmente: la <em>finitud del cuerpo es la base</em> de la interdependencia. "Lo que no sabe mi cerebro, lo sabe el de otro." No es solo que nos ayudemos: es que somos seres <em>incompletos constitutivamente</em>. La marca del ombligo lo recuerda: nacemos ligados a otro.' },
+      { label:'Por qué importa', content:'Desmonta la ficción del <em>individuo autosuficiente</em> que domina el imaginario liberal y capitalista. Muestra que la <em>autonomía completa es una abstracción</em>, no una realidad vivible.' },
+      { label:'Diferencias con conceptos parecidos', content:'No es lo mismo que <em>dependencia</em> (que implica asimetría y puede ser negativa). La interdependencia es <em>mutua y estructural</em>, no una debilidad.' },
+      { label:'Errores comunes', content:'<ul><li>Creer que admitir interdependencia implica <em>perder autonomía</em>.</li><li>Confundirla con homogeneidad: podemos ser interdependientes y <em>profundamente diferentes</em>.</li></ul>' },
+      { label:'Ejemplos reales', full:true, content:'El <em>lenguaje</em>: no inventé las palabras que uso para pensar. El <em>sistema de salud</em>: mi vacuna me protege y protege a otros. Las <em>cadenas de suministro</em> globales: mi ropa depende del trabajo de otros.' },
+      { label:'Idea clave', full:true, content:'<em>La interdependencia no es una virtud que podemos elegir tener: es la condición estructural de la existencia humana.</em>' },
+    ]
+  },
+  {
+    title: 'Individualismo',
+    author: 'Crítica: Garcés, Peña, Han',
+    fields: [
+      { label:'Definición', full:true, content:'Doctrina que sitúa al <em>individuo como unidad básica e irreductible</em> de la sociedad, la moral y la política. El individuo tiene primacía sobre lo colectivo.' },
+      { label:'Explicación profunda', content:'El individualismo moderno surge en el siglo XVII con el <em>contractualismo</em> (Locke, Rousseau, Hobbes): la sociedad es un artificio creado por voluntades individuales. Consecuencia: el nosotros siempre parece artificial, y la alteridad del otro se reduce porque el otro es visto como <em>rival o socio</em>, no como alguien que me constituye. Garcés llama a esto <em>"privatización de la existencia"</em>.' },
+      { label:'Diferencias con conceptos parecidos', content:'No es lo mismo que <em>egoísmo</em> (que es moral). El individualismo es una <em>tesis filosófica</em> sobre la unidad básica de lo social. Tampoco es sinónimo de autonomía, que puede coexistir con la comunidad.' },
+      { label:'Errores comunes', content:'<ul><li>Confundirlo con egoísmo (puedo ser individualista y solidario).</li><li>Pensar que criticarlo implica <em>colectivismo total</em>.</li><li>Ignorar que el individualismo tiene logros reales (<em>derechos humanos</em>, libertades).</li></ul>' },
+      { label:'Idea clave', full:true, content:'<em>El individualismo hace imposible el nosotros genuino: solo produce un "yo dilatado".</em>' },
+    ]
+  },
+  {
+    title: 'Identidad',
+    author: 'Taylor, Peña, Lacan',
+    fields: [
+      { label:'Definición', full:true, content:'Lo que hace que un sujeto sea él mismo. En filosofía contemporánea, la identidad <em>no es fija ni esencial</em>: se construye en relación con el otro y en procesos históricos y culturales.' },
+      { label:'Explicación profunda', content:'Para Charles Taylor, la identidad es <em>fundamentalmente dialógica</em>: nos convertimos en quienes somos en diálogo con "otros significativos". No hay identidad sin alteridad. Carlos Peña vincula la identidad a la política: la <em>"política de la identidad"</em> hace del reconocimiento de las diferencias grupales el centro del debate político, con el riesgo de fragmentar el bien común.' },
+      { label:'Errores comunes', content:'<ul><li>Pensar la identidad como algo <em>fijo y dado</em> (esencialismo).</li><li>Creer que defender la identidad implica <em>cerrarse al otro</em>.</li></ul>' },
+      { label:'Idea clave', full:true, content:'<em>La identidad no es esencial ni fija: se construye en el diálogo con el otro, lo que hace que la alteridad sea constitutiva del yo.</em>' },
+    ]
+  },
+  {
+    title: 'Gran Otro / Pequeño otro (Lacan)',
+    author: 'Jacques Lacan',
+    fields: [
+      { label:'Definición', full:true, content:'<em>Pequeño otro (autre):</em> el semejante, el otro concreto con quien me relaciono imaginariamente. <em>Gran Otro (Autre):</em> el orden simbólico, el lenguaje, la ley, lo que excede al sujeto y lo constituye.' },
+      { label:'Explicación profunda', content:'Para Lacan (influenciado por Saussure), el sujeto se constituye en el lenguaje, que es el <em>gran Otro</em>. No somos dueños del lenguaje: el lenguaje nos habla antes de que hablemos. El <em>pequeño otro</em> es la dimensión imaginaria: el espejo, el semejante, la rivalidad. Esto muestra que hay una <em>alteridad radical en el lenguaje mismo</em> que me constituye.' },
+      { label:'Diferencia clave', content:'El gran Otro no es una persona: es el <em>orden que me precede</em> (lenguaje, ley, cultura). El pequeño otro es la persona concreta. <em>No confundir los dos niveles.</em>' },
+      { label:'Errores comunes', content:'<ul><li>Confundir el gran Otro con Dios o con una autoridad concreta.</li><li>Pensar que Lacan habla de lo mismo que Lévinas (ambos usan "Otro" pero con <em>sentidos distintos</em>).</li></ul>' },
+      { label:'Idea clave', full:true, content:'<em>El gran Otro (orden simbólico/lenguaje) me constituye como sujeto. El pequeño otro es el semejante imaginario. Son niveles distintos de la alteridad.</em>' },
+    ]
+  },
+  {
+    title: 'Ética como filosofía primera (Lévinas)',
+    author: 'Lévinas',
+    fields: [
+      { label:'Definición', full:true, content:'Propuesta de <em>invertir la jerarquía filosófica tradicional</em>: en lugar de la ontología como base de todo saber, la ética — la relación con el otro — es el <em>punto de partida</em> de cualquier filosofía genuina.' },
+      { label:'Explicación profunda', content:'La tradición filosófica occidental (Aristóteles, Heidegger) pone la ontología primero. Lévinas invierte esto: <em>"Incluso la filosofía que cuestiona el sentido del ser lo hace a partir del reencuentro con el otro."</em> Esto significa que el diálogo, la responsabilidad, el encuentro concreto, son <em>más fundamentales que cualquier sistema teórico</em>.' },
+      { label:'Errores comunes', content:'<ul><li>Pensar que Lévinas <em>rechaza la ontología completamente</em> (no: la subordina).</li><li>Confundirlo con relativismo: la ética primera es muy <em>exigente</em>, no dice que "todo vale".</li></ul>' },
+      { label:'Idea clave', full:true, content:'<em>"Filosofía primera = ética." La relación con el otro es más fundamental que cualquier pregunta sobre el ser.</em>' },
+    ]
+  },
+  {
+    title: 'El otro en la era digital (Byung-Chul Han)',
+    author: 'Byung-Chul Han',
+    fields: [
+      { label:'Definición', full:true, content:'Para Han, la <em>digitalización produce la desaparición del otro</em>: en lugar de encontrarnos con personas genuinamente diferentes, solo interactuamos con versiones de nosotros mismos (algoritmos de confirmación, <em>burbujas de filtro</em>).' },
+      { label:'Explicación profunda', content:'Han diagnostica la <em>sociedad del rendimiento</em>: cada uno se explota a sí mismo buscando optimizarse. En este contexto, el otro deja de ser un misterio ético para convertirse en instrumento o amenaza. Las redes producen la ilusión de conexión, pero generan <em>narcisismo y transparencia</em>: todo se muestra, nada queda oculto, el otro pierde su alteridad irreductible.' },
+      { label:'Relación con otros conceptos', content:'Contrasta directamente con Lévinas: <em>lo que Lévinas propone (encuentro con el otro irreductible) es exactamente lo que Han dice que la era digital destruye</em>. Complementa a Garcés (privatización de la existencia).' },
+      { label:'Idea clave', full:true, content:'<em>En la era digital, el otro desaparece: solo queda el espejo de uno mismo. Esto destruye la base de la ética levinasiana.</em>' },
+    ]
+  },
+  {
+    title: 'Política de identidad (Carlos Peña)',
+    author: 'Carlos Peña',
+    fields: [
+      { label:'Definición', full:true, content:'Fenómeno político contemporáneo en que grupos sociales hacen de su <em>identidad específica el eje central</em> de su acción política, denunciando agravios históricos y exigiendo reconocimiento.' },
+      { label:'Explicación profunda', content:'Peña (siguiendo a Fukuyama) describe un tránsito: de la <em>democracia liberal</em> (universalismo) a la <em>política de identidad</em> (particularismo grupal). El riesgo: acentuar diferencias entre grupos, debilitar el universalismo y dificultar la construcción de un <em>bien común</em>. Paradójicamente, la política de identidad puede reproducir el individualismo, pero a <em>escala grupal</em>.' },
+      { label:'Errores comunes', content:'<ul><li>Pensar que Peña está en contra de los derechos de minorías (no: critica que la <em>identidad sea el único lenguaje político</em>).</li><li>Confundirlo con conservadurismo.</li></ul>' },
+      { label:'Idea clave', full:true, content:'<em>La política de identidad puede ser un individualismo a escala grupal que destruye el bien común y dificulta el encuentro real con el otro.</em>' },
+    ]
+  },
+];
+
+function buildConceptCards() {
+  const container = document.getElementById('conceptos-cards');
+  conceptsData.forEach((c, i) => {
+    const card = document.createElement('div');
+    card.className = 'concept-card';
+    card.innerHTML = `
+      <div class="cc-header" onclick="toggleCC(${i})">
+        <div class="cc-title">${c.title}</div>
+        <span class="cc-author-tag">${c.author}</span>
+        <span class="cc-toggle" id="cc-tog-${i}">▼</span>
+      </div>
+      <div class="cc-body" id="cc-body-${i}">
+        <div class="cc-grid">
+          ${c.fields.map(f=>`
+            <div class="cc-field${f.full?' full':''}">
+              <div class="cc-field-label">${f.label}</div>
+              <div class="cc-field-content">${f.content}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+function toggleCC(i) {
+  const body = document.getElementById(`cc-body-${i}`);
+  const tog = document.getElementById(`cc-tog-${i}`);
+  const open = body.classList.toggle('open');
+  tog.classList.toggle('open', open);
+}
+buildConceptCards();
+
+// ═══════════════════════════════════════
+// MAPA MENTAL
+// ═══════════════════════════════════════
+const mmData = {
+  alteridad:'<strong>ALTERIDAD:</strong> La condición de ser <em>radicalmente otro</em>. Nunca reducible a mis categorías. Funda la ética (Lévinas). Es constitutiva del yo (Taylor, Lacan). Está siendo destruida en la era digital (Han).',
+  levinas:'<strong>LÉVINAS — Ética como filosofía primera:</strong> El <em>rostro</em> del otro genera responsabilidad infinita y asimétrica. La ética antecede a la ontología. <em>"El otro me ordena asumir la alteridad hasta el infinito."</em>',
+  nosotros:'<strong>GARCÉS — Nosotros / Vida en común:</strong> El nosotros verdadero no es un yo dilatado. Los cuerpos son finitos y se continúan. <em>"Imposible ser solo un individuo."</em> La interdependencia es estructural.',
+  individualismo:'<strong>INDIVIDUALISMO:</strong> El individuo como unidad básica irreductible. Genera el <em>"yo dilatado"</em> cuando quiere hablar de nosotros. Se opone a la vida en común (Garcés). Carlos Peña lo ve reproducido en la política de identidad.',
+  han:'<strong>BYUNG-CHUL HAN:</strong> En la era digital <em>el otro desaparece</em>. Las redes sociales generan narcisismo y burbujas de confirmación. La ética levinasiana se hace imposible sin encuentro con el otro genuino.',
+  responsabilidad:'<strong>RESPONSABILIDAD ÉTICA (Lévinas):</strong> Nace del encuentro con el rostro del otro. Es <em>infinita, asimétrica y previa a la decisión racional</em>. No es un contrato: es una exigencia que me precede.',
+  pena:'<strong>CARLOS PEÑA — Política de identidad:</strong> Paso de la democracia liberal al particularismo grupal. Riesgo: destruir el bien común. <em>Paradójicamente reproduce el individualismo a escala grupal.</em>'
+};
+function showMm(k) {
+  const box=document.getElementById('mm-info');
+  box.style.display='block';
+  box.innerHTML=mmData[k];
+}
+
+// ═══════════════════════════════════════
+// DESARROLLO DATA
+// ═══════════════════════════════════════
+const devData = [
+  { title:'Análisis de texto — Garcés', ctx:'"En las sociedades occidentales modernas la palabra «nosotros» no nombra una realidad sino un problema. [...] La modernidad occidental, hasta hoy, es la historia ambiciosa y sangrante del problema del nosotros." (Marina Garcés)', prompt:'Analiza el fragmento. ¿A qué "problema" se refiere Garcés? ¿Por qué el nosotros no nombra una realidad? Usa al menos dos conceptos filosóficos trabajados en clases.' },
+  { title:'Comparación — Lévinas y Han', ctx:null, prompt:'Compara la visión de Lévinas sobre el encuentro con el otro y el diagnóstico de Han sobre la era digital. ¿En qué sentido el diagnóstico de Han desafía la propuesta ética de Lévinas? ¿Cómo podría responderse desde Lévinas?' },
+  { title:'Aplicación — Contingencia chilena', ctx:null, prompt:'Elige un problema social chileno actual (migración, violencia escolar, discriminación, redes sociales). Aplica el concepto de alteridad de Lévinas y al menos un concepto de Garcés para diagnosticar el problema y proponer una salida filosófica.' },
+  { title:'Argumentación — Política de identidad', ctx:null, prompt:'¿En qué medida la "política de identidad" descrita por Carlos Peña puede considerarse una forma de individualismo? Argumenta filosóficamente usando los conceptos de alteridad, bien común e interdependencia.' },
+  { title:'Reflexión — Vida privada y nosotros', ctx:'"La privatización extrema de la existencia individual" es uno de los problemas que Garcés identifica en el mundo global.', prompt:'¿Qué aspecto de tu vida privada es, en realidad, algo que debes o compartes con un "nosotros"? Elabora filosóficamente usando interdependencia, vida en común y alteridad.' },
+  { title:'Análisis de texto — Alteridad como origen', ctx:'"El problema de la alteridad encuentra su origen en la suposición de un centro. De acuerdo a ello, adquirimos una identidad cuyo fundamento es dotarnos de una ubicación y un sentido que articula la manera de relacionarnos con el mundo. En este aborde, el otro (el extranjero, el loco, el marginal) es aquel que se distingue del límite del mundo y lo cuestiona."', prompt:'¿Qué significa que la alteridad tenga su origen en "la suposición de un centro"? ¿Cómo se relaciona con la identidad y con la responsabilidad ética de Lévinas?' },
+  { title:'Interdependencia y cuerpo', ctx:'"Lo que no sabe mi cerebro, lo sabe el de otro. Lo que no veo a mi espalda alguien lo percibe desde otro ángulo." (Marina Garcés)', prompt:'¿Por qué Garcés afirma que la finitud del cuerpo es la base de la interdependencia y no de la separación? ¿Cómo cambia esta idea nuestra comprensión de lo que significa ser un individuo?' },
+  { title:'El rostro y la violencia', ctx:null, prompt:'¿De qué manera el ejercicio de la alteridad podría desactivar la violencia en nuestras interacciones digitales y sociales, donde el "otro" es frecuentemente visto como un enemigo? Usa el concepto de "rostro" de Lévinas y el diagnóstico de Han.' },
+  { title:'Monólogo filosófico — Diagnóstico y propuesta', ctx:null, prompt:'Redacta un manifiesto filosófico breve que proponga una salida a la "privatización de la existencia" en el contexto chileno actual. Estructura: (1) Diagnóstico de un problema cotidiano usando el concepto de "nosotros" o "yo dilatado"; (2) Fundamentación desde Lévinas: cómo el rostro del otro rompe la lógica del otro como objeto; (3) Propuesta basada en la "vida en común" de Garcés.' },
+  { title:'Grandes Otros y pequeños otros — Lacan aplicado', ctx:null, prompt:'Explica la distinción lacaniana entre el gran Otro y el pequeño otro. Luego aplícala a un fenómeno contemporáneo como las redes sociales o el lenguaje político. ¿En qué se diferencia esta noción de la alteridad de Lévinas?' },
+  { title:'Alteridad e identidad — Pregunta argumentativa', ctx:null, prompt:'¿Puede existir identidad sin alteridad? Argumenta filosóficamente a favor de que la identidad es siempre relacional, usando al menos dos autores estudiados en clases.' },
+  { title:'Ética como filosofía primera — Pregunta de inferencia', ctx:'"Cuando hablo de filosofía primera me refiero a una filosofía del diálogo que no puede no ser una ética." (Lévinas)', prompt:'¿Qué implica esta afirmación para la manera en que entendemos el conocimiento filosófico? ¿Por qué el diálogo sería necesariamente ético? ¿Qué consecuencias tiene esto para la relación entre la filosofía y la vida cotidiana?' },
+];
+
+function buildDev() {
+  const container = document.getElementById('dev-container');
+  devData.forEach((q,i) => {
+    const div = document.createElement('div');
+    div.className = 'dev-question';
+    div.innerHTML = `
+      <h3>${i+1}. ${q.title}</h3>
+      ${q.ctx?`<div class="dev-context">${q.ctx}</div>`:''}
+      <p style="margin-bottom:.7rem;font-size:.9rem">${q.prompt}</p>
+      <textarea class="dev-input" id="dinp-${i}" placeholder="Escribe tu respuesta aquí..."></textarea><br>
+      <button class="btn-corregir" id="dbtn-${i}" onclick="corregir(${i})">Corregir con IA ✦</button>
+      <div class="ai-feedback" id="dfb-${i}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+async function corregir(i) {
+  const inp=document.getElementById(`dinp-${i}`);
+  const btn=document.getElementById(`dbtn-${i}`);
+  const fb=document.getElementById(`dfb-${i}`);
+  const resp=inp.value.trim();
+  if(!resp||resp.length<30){alert('Escribe una respuesta más completa primero.');return;}
+  btn.disabled=true;
+  btn.innerHTML='Corrigiendo <span class="loading-dots"><span></span><span></span><span></span></span>';
+  fb.classList.add('visible');
+  fb.innerHTML='<div style="color:var(--text-muted)">Analizando tu respuesta...</div>';
+  const q=devData[i];
+  const sys=`Eres un profesor experto en filosofía (alteridad, ética, Lévinas, Garcés, Han, Peña, Lacan). Evalúa la respuesta de un estudiante de IV° medio. Sé exigente pero justo. Responde EXACTAMENTE en JSON puro sin backticks:
+{"nota":"X.X","fortalezas":"...","errores":"...","que_falto":"...","como_mejorar":"...","modelo":"..."}
+nota del 1.0 al 7.0. modelo: respuesta ejemplo de 150-200 palabras.`;
+  const usr=`Pregunta: ${q.prompt}\n${q.ctx?'Contexto: '+q.ctx:''}
+
+Respuesta del estudiante:\n${resp}`;
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content:usr}]})});
+    const data=await res.json();
+    const text=data.content.map(c=>c.text||'').join('');
+    let parsed;
+    try{parsed=JSON.parse(text);}catch(e){const m=text.match(/\{[\s\S]*\}/);parsed=m?JSON.parse(m[0]):null;}
+    if(!parsed)throw new Error('No se pudo parsear');
+    const nota=parseFloat(parsed.nota);
+    const col=nota>=6?'#5a9e7a':nota>=4?'#c8a96e':'#c26e6e';
+    fb.innerHTML=`<div class="feedback-score" style="color:${col}">Nota estimada: ${parsed.nota}</div>
+      <div class="feedback-section"><h4>✅ Fortalezas</h4><p>${parsed.fortalezas}</p></div>
+      <div class="feedback-section"><h4>⚠️ Errores detectados</h4><p>${parsed.errores}</p></div>
+      <div class="feedback-section"><h4>❌ Qué faltó</h4><p>${parsed.que_falto}</p></div>
+      <div class="feedback-section"><h4>🔧 Cómo mejorar</h4><p>${parsed.como_mejorar}</p></div>
+      <div class="feedback-section"><h4>📝 Respuesta modelo</h4><p style="font-style:italic;color:var(--text-muted)">${parsed.modelo}</p></div>`;
+  }catch(err){fb.innerHTML=`<div style="color:var(--red)">Error: ${err.message}</div>`;}
+  btn.disabled=false;btn.innerHTML='Corregir con IA ✦';
+}
+buildDev();
+
+// ═══════════════════════════════════════
+// QUIZ DATA
+// ═══════════════════════════════════════
+const quizData = [
+  { q:'Para Lévinas, la ética es la "filosofía primera". ¿Qué implica esto respecto a la ontología?', opts:['A) La ontología debe reemplazarse por la ética en todos los ámbitos.','B) La relación ética con el otro precede y fundamenta cualquier pregunta sobre el ser.','C) La ontología y la ética son disciplinas independientes sin relación jerárquica.','D) La ética solo puede desarrollarse después de resolver las preguntas ontológicas.'], correct:1, exp:'Lévinas no rechaza la ontología, sino que la subordina: la relación ética con el otro (el rostro) es el punto de partida de cualquier filosofía. "Incluso la filosofía que cuestiona el sentido del ser lo hace a partir del reencuentro con el otro."' },
+  { q:'Garcés afirma que el "nosotros" en las lenguas occidentales es un "yo dilatado". ¿Cuál es la consecuencia filosófica de esto?', opts:['A) El nosotros es una construcción artificial que debe eliminarse del lenguaje.','B) La primera persona siempre domina el nosotros, generando solipsismo y fracasos en la comunicación colectiva.','C) El nosotros es una forma superior de conciencia que supera al yo individual.','D) Las lenguas romances son filosóficamente inferiores en este aspecto.'], correct:1, exp:'Siguiendo a Benveniste, Garcés muestra que "en nosotros siempre predomina yo". El nosotros occidental es solo una primera persona amplificada, con sus aporías: solipsismo, fracaso comunicativo. La solución de Garcés es reformular el nosotros desde la finitud del cuerpo.' },
+  { q:'Han afirma que "el otro ya no existe". ¿En qué sentido esto está en tensión con la ética de Lévinas?', opts:['A) Porque Lévinas creía que el otro era una ilusión y Han lo confirma.','B) Porque la responsabilidad levinasiana exige el encuentro con un otro genuinamente diferente, que la era digital elimina.','C) Porque Han rechaza la filosofía europea en la que Lévinas se inscribe.','D) Porque para Lévinas el otro solo existe en contextos religiosos.'], correct:1, exp:'La ética de Lévinas requiere el encuentro concreto con el rostro del otro irreductible. Si la era digital solo nos devuelve versiones de nosotros mismos (algoritmos de confirmación), entonces el fundamento del llamado ético desaparece: no hay rostro que me interpele.' },
+  { q:'Según Carlos Peña, ¿en qué sentido la política de identidad puede reproducir el individualismo que critica?', opts:['A) Porque sus líderes son individualistas que usan las causas colectivas para beneficio personal.','B) Porque al centrar el debate en diferencias de grupos particulares, puede destruir el universalismo y el bien común, siendo un individualismo a escala grupal.','C) Porque rechaza la democracia liberal que es el único sistema realmente colectivista.','D) Porque la política de identidad proviene del individualismo anglosajón.'], correct:1, exp:'Peña señala que la política de identidad puede reproducir la lógica del individualismo, pero a escala grupal: en lugar de "yo primero", es "mi grupo primero". El riesgo es destruir la posibilidad de un lenguaje político universal y de preocupación por el bien común.' },
+  { q:'¿Cuál es la diferencia fundamental entre el "gran Otro" y el "pequeño otro" en Lacan?', opts:['A) El gran Otro es Dios y el pequeño otro es el prójimo en sentido cristiano.','B) El gran Otro es el inconsciente individual y el pequeño otro es el consciente.','C) El gran Otro es el orden simbólico (lenguaje, ley, cultura) que constituye al sujeto; el pequeño otro es el semejante imaginario.','D) El gran Otro es la sociedad en su conjunto y el pequeño otro es cada individuo.'], correct:2, exp:'En Lacan, el gran Otro (Autre) es el orden simbólico: el lenguaje, la ley, la cultura que me precede y me constituye como sujeto. El pequeño otro (autre) es el semejante imaginario: el otro concreto con quien me comparo y rivalizo. Son dos dimensiones completamente distintas.' },
+  { q:'Si la responsabilidad ética de Lévinas es "asimétrica", esto significa que:', opts:['A) Solo los más poderosos tienen responsabilidad sobre los débiles.','B) La responsabilidad varía según la cercanía afectiva con el otro.','C) Mi responsabilidad hacia el otro no depende de que el otro sea responsable hacia mí; es incondicional e independiente de la reciprocidad.','D) La responsabilidad es mayor hacia el otro cuando este ha actuado bien conmigo.'], correct:2, exp:'La asimetría en Lévinas significa que la responsabilidad ética no funciona como un contrato recíproco. El rostro del otro me genera obligación independientemente de lo que el otro haga. Lévinas dice que soy responsable incluso de la responsabilidad del otro: la exigencia es incondicional.' },
+  { q:'Garcés propone que la finitud del cuerpo es base de la interdependencia. ¿Cuál afirmación captura mejor este argumento?', opts:['A) Los cuerpos son débiles y por eso necesitan de otros para sobrevivir biológicamente.','B) La finitud no nos separa sino que nos continúa: donde no llega mi capacidad, llega la de otro, y esto es estructural, no circunstancial.','C) La muerte como horizonte común crea solidaridad emocional entre humanos.','D) Los cuerpos finitos generan escasez que paradójicamente produce cooperación.'], correct:1, exp:'Garcés argumenta que la finitud no implica separación sino continuación: "lo que no sabe mi cerebro, lo sabe el de otro." Esta interdependencia es la condición constitutiva de la existencia humana, no un defecto que superar.' },
+  { q:'Un estudiante dice: "La alteridad es simplemente respetar que otros son diferentes a mí." ¿Qué le falta a esta comprensión?', opts:['A) Nada, esa es exactamente la definición filosófica de alteridad.','B) Le falta reconocer que la alteridad implica responsabilidad activa y constitución mutua, no solo aceptación pasiva de la diferencia.','C) Le falta mencionar que la alteridad solo aplica a culturas, no a personas individuales.','D) Le falta especificar que la alteridad es un concepto sociológico, no filosófico.'], correct:1, exp:'La comprensión es correcta pero insuficiente. La alteridad filosófica (Lévinas) no es solo "respetar las diferencias". Implica que el otro me interpela, me genera responsabilidad, y es constitutivo de mi propia identidad. La alteridad no es una postura que adopto: es una condición que me define.' },
+  { q:'¿Cómo ilustran las "redes sociales" el problema del "nosotros como yo dilatado" de Garcés?', opts:['A) Las redes sociales son tecnologías que crean comunidades globales, superando el yo dilatado.','B) En redes tendemos a seguir solo lo que confirma nuestras creencias, convirtiendo el espacio "colectivo" en extensión del yo individual.','C) Las redes sociales solo afectan al pequeño otro de Lacan, no al nosotros colectivo.','D) Garcés no tiene postura sobre tecnología.'], correct:1, exp:'Las redes ilustran el "yo dilatado": creamos burbujas de confirmación donde el "nosotros" es una extensión del yo y sus creencias, no un encuentro genuino con la alteridad. Han lo explicita: el otro ya no existe, solo encontramos versiones multiplicadas de nosotros mismos.' },
+  { q:'"El ser humano no puede decir yo sin que resuene, al mismo tiempo, un nosotros" (Garcés). ¿Cuál es la implicación filosófica?', opts:['A) Que el lenguaje siempre requiere un interlocutor, por lo que la filosofía debe ser siempre dialógica.','B) Que la individualidad es constitutivamente relacional: el yo no puede existir ni pensarse sin la dimensión del nosotros que lo hace posible.','C) Que las lenguas con pronombres inclusivos son filosóficamente superiores.','D) Que la democracia directa es la consecuencia política necesaria.'], correct:1, exp:'La afirmación de Garcés apunta a que el yo no es una unidad autosuficiente: es constitutivamente relacional. No es un argumento solo lingüístico, sino ontológico: el yo se hace posible y se sostiene en una red de relaciones (el nosotros).' },
+  { q:'¿Por qué la discriminación racial es filosóficamente coherente con la noción de "negar el rostro" en Lévinas?', opts:['A) Porque la discriminación es un acto legal que Lévinas vincula a las instituciones del Estado.','B) Porque al discriminar reducimos al otro a una categoría y lo despojamos de su singularidad irreductible, haciendo imposible el llamado ético del rostro.','C) Porque Lévinas era judío y experimentó la discriminación, dando a su filosofía base autobiográfica.','D) Porque la discriminación viola contratos sociales que Lévinas sitúa en la base de la ética.'], correct:1, exp:'La discriminación es la operación filosófica que Lévinas llama "negar el rostro": reducir al otro a una categoría abstracta y perder su singularidad irreductible. Al cosificarlo, dejamos de escuchar el llamado ético. Por eso el racismo no es solo moralmente incorrecto: es la negación misma de la ética.' },
+  { q:'¿Cuál de los siguientes autores más directamente cuestiona el paso de la democracia liberal a la política de la identidad como problemático?', opts:['A) Marina Garcés, porque critica la privatización de la existencia.','B) Carlos Peña, porque advierte sobre la fragmentación del bien común cuando la identidad grupal domina el debate.','C) Byung-Chul Han, porque denuncia la desaparición del otro en el entorno digital.','D) Lévinas, porque su ética exige trascender cualquier identificación grupal.'], correct:1, exp:'Carlos Peña es quien hace explícitamente este diagnóstico: la política de identidad puede convertirse en un individualismo a escala grupal que destruye el universalismo de la democracia liberal. Aunque los otros autores están relacionados con el tema, Peña lo formula directamente.' },
+  { q:'¿Cuál es la relación correcta entre los conceptos de "alteridad irreductible" e "interdependencia"?', opts:['A) Son opuestos: la alteridad nos separa y la interdependencia nos une.','B) Son lo mismo: ambos expresan que necesitamos al otro.','C) La alteridad reconoce que el otro es genuinamente otro, mientras que la interdependencia reconoce que nos necesitamos mutuamente: son dimensiones complementarias.','D) La interdependencia niega la alteridad al presuponer que somos similares en nuestras necesidades.'], correct:2, exp:'Son conceptos complementarios, no idénticos ni opuestos. La alteridad reconoce la irreductibilidad del otro (filosófico-ético); la interdependencia reconoce que nos constituimos mutuamente (ontológico-social). Juntos: el otro es genuinamente otro Y lo necesito para existir.' },
+  { q:'¿En qué sentido el "yo dilatado" que describe Garcés representa un fracaso ético, según la perspectiva de Lévinas?', opts:['A) Porque el yo dilatado acumula demasiado poder y se convierte en tirano.','B) Porque cuando el nosotros es solo un yo ampliado, no hay un verdadero otro que pueda interpelarme y generar responsabilidad ética.','C) Porque el yo dilatado elimina la propiedad privada que Lévinas considera sagrada.','D) Porque el yo dilatado reproduce la lógica del capitalismo que Lévinas critica.'], correct:1, exp:'Si el "nosotros" es solo un "yo dilatado" (Garcés), entonces no hay un genuino otro que me interpele. Para Lévinas, la ética nace del encuentro con el rostro del otro radicalmente diferente. Sin ese otro, no hay llamado ético posible: el yo solo se escucha a sí mismo.' },
+  { q:'¿Qué distingue la "responsabilidad" levinasiana de la "obligación contractual" de tipo kantiano o rousseauniano?', opts:['A) La responsabilidad levinasiana es universal y la contractual es particular.','B) La responsabilidad levinasiana surge del encuentro con el rostro del otro y es previa a cualquier acuerdo o decisión racional; la contractual nace de principios o acuerdos elegidos racionalmente.','C) La obligación contractual es más exigente porque tiene sanciones legales; la levinasiana es solo moral.','D) No hay diferencia sustancial: ambas buscan regular la convivencia entre individuos libres.'], correct:1, exp:'La clave está en el origen: la responsabilidad de Lévinas no nace de acuerdos racionales entre individuos autónomos (como en Kant o Rousseau), sino del encuentro concreto con el rostro del otro que me interpela antes de que yo decida algo. Es previa a la libertad y al contrato.' },
+  { q:'Desde la perspectiva de la alteridad estudiada en clase, ¿qué elemento es el más problemático del fenómeno del bullying?', opts:['A) Que viola normas escolares que generan sanciones legales.','B) Que el agresor trata al agredido como un objeto sin rostro, negando su alteridad y destruyendo la base de cualquier responsabilidad ética hacia él.','C) Que produce daño psicológico medible que afecta el rendimiento académico.','D) Que refleja tensiones entre identidades grupales que Carlos Peña identifica como política de identidad.'], correct:1, exp:'Desde la alteridad, el bullying es filosóficamente la cosificación del otro: se niega el "rostro" del agredido (Lévinas), se lo convierte en objeto de burla o violencia. Al hacerlo, el agresor destruye la posibilidad del llamado ético que ese rostro debería generarle.' },
+];
+
+let quizScore=0;
+function buildQuiz(){
+  const cont=document.getElementById('quiz-container');
+  const bar=document.getElementById('quiz-score-bar');
+  bar.style.display='flex';
+  document.getElementById('quiz-total').textContent=quizData.length;
+  quizData.forEach((item,i)=>{
+    const div=document.createElement('div');
+    div.className='quiz-question';
+    div.innerHTML=`<p><strong>Pregunta ${i+1}.</strong> ${item.q}</p>
+      ${item.opts.map((o,j)=>`<button class="quiz-option" onclick="answerQ(${i},${j},this)">${o}</button>`).join('')}
+      <div class="quiz-explanation" id="exp-${i}">${item.exp}</div>`;
+    cont.appendChild(div);
+  });
+}
+function answerQ(qi,chosen,btn){
+  const q=quizData[qi];
+  const parent=btn.parentElement;
+  const btns=parent.querySelectorAll('.quiz-option');
+  if(btns[0].disabled)return;
+  btns.forEach(b=>b.disabled=true);
+  btns[chosen].classList.add(chosen===q.correct?'correct':'wrong');
+  btns[q.correct].classList.add('correct');
+  document.getElementById(`exp-${qi}`).style.display='block';
+  if(chosen===q.correct){quizScore++;document.getElementById('quiz-score').textContent=quizScore;}
+}
+buildQuiz();
+
+// ═══════════════════════════════════════
+// NO ENTENDÍ DATA — ALL CONCEPTS
+// ═══════════════════════════════════════
+const neData = [
+  { titulo:'Alteridad', simple:'Imagínate que tienes un vecino de otro país que come cosas raras, habla diferente y tiene costumbres que no entiendes. La alteridad dice: ese vecino <strong>nunca podrás entenderlo completamente</strong>, y eso está bien. Lo que importa es reconocer que existe, que siente, y que su diferencia te <strong>obliga a tratarlo bien</strong>, no solo a tolerarlo.', completo:'La alteridad es la condición filosófica por la cual el otro siempre <em>excede mis categorías de comprensión</em>. No es una diferencia cuantitativa (él es un poco diferente) sino cualitativa y radical: el otro es absolutamente exterior a mi mundo. Para Lévinas, esto no es un problema sino la <em>condición de posibilidad de la ética</em>: solo porque el otro es irreductible, puede interpelarme genuinamente. Si pudiera reducirlo a mis categorías, solo me hablaría yo mismo. La alteridad es también lo que hace que <em>la identidad sea posible</em>: me defino en contraste con el otro.', analogia:'Es como intentar describir un color que nunca has visto: no tengo categorías para capturarlo. El otro es así: siempre algo que no puedo capturar del todo.', faqs:[{p:'¿La alteridad significa que no puedo conocer al otro?',r:'No exactamente. Puedo conocer muchas cosas del otro. Lo que dice la alteridad es que nunca lo <em>agoto</em>: siempre hay algo que escapa a mi comprensión. Eso es lo que lo hace "irreductible".'},{p:'¿Alteridad es lo mismo que empatía?',r:'No. La empatía puede ser proyección del yo (me pongo en "su lugar" imaginando cómo me sentiría <em>yo</em>). La alteridad reconoce que el otro tiene una experiencia radicalmente diferente a la mía, que no puedo imaginar completamente.'}] },
+  { titulo:'El Rostro (Lévinas)', simple:'Piensa en cuando ves a alguien llorando en la calle. Algo te hace querer ayudar, aunque no lo conozcas. No es que hayas razonado: "debo ayudar". Es que su cara, su presencia, te <strong>"habla" directamente</strong>. Eso es lo que Lévinas llama "rostro": la presencia del otro que me exige respuesta <strong>antes de que yo piense</strong>.', completo:'El <em>"rostro" (visage)</em> en Lévinas no es la cara física. Es una categoría ética: la manifestación de la vulnerabilidad y exigencia del otro que me interpela sin palabras. El rostro dice <em>"no me mates"</em>, "no me ignores", "soy alguien que sufre y necesita". Esta interpelación es <em>anterior a mi decisión</em>: me hace responsable antes de que yo elija serlo. Por eso Lévinas dice que la responsabilidad es asimétrica: no depende de reciprocidad. El rostro puede ser una voz, un texto, una mirada.', analogia:'Es como recibir una llamada de emergencia: antes de saber quién es o qué pide, el tono de voz ya te activa. El rostro es esa "llamada de emergencia" permanente del otro.', faqs:[{p:'¿Debo ser responsable de todos en el mundo?',r:'Lévinas dice que sí, en principio: la responsabilidad es "infinita". Pero en la práctica, la justicia y las instituciones median. La ética se articula con la política.'},{p:'¿El rostro puede ser el de un enemigo?',r:'Sí, eso es lo radical de Lévinas. El rostro del otro —incluso del que me hace daño— me interpela. La ética no depende de que el otro sea bueno o malo.'}] },
+  { titulo:'Responsabilidad Ética', simple:'Normalmente pensamos que la responsabilidad funciona así: "si tú me ayudas, yo te ayudo". Lévinas dice que no. La responsabilidad ética funciona así: <strong>el otro está ahí, sufre, y eso ya me hace responsable</strong>, independientemente de si me ha ayudado antes o si voy a recibir algo a cambio.', completo:'La responsabilidad ética levinasiana no es recíproca. No es un contrato. Es lo que Lévinas llama <em>responsabilidad asimétrica</em>: el otro me exige, y yo respondo, sin esperar reciprocidad. Lévinas llega a decir que soy <em>responsable de la responsabilidad del otro</em>: la exigencia es infinita. Esto rompe con toda la ética contractualista (Kant, Rousseau) que funda los deberes en acuerdos racionales. Para Lévinas, la ética surge del <em>encuentro concreto</em>, no de principios abstractos.', analogia:'Como el que siempre recoge basura en la calle aunque nadie se lo pida y aunque otros no lo hagan. No porque exista una ley o un acuerdo: porque el desorden interpela su sentido de lo correcto.', faqs:[{p:'¿Es realista una responsabilidad "infinita"?',r:'Lévinas lo sabe: en la práctica necesitamos instituciones y justicia para distribuir la responsabilidad. El punto filosófico es que la ética no tiene un "techo": siempre hay más que hacer por el otro.'},{p:'¿Qué diferencia a la responsabilidad de la culpa?',r:'La culpa es psicológica y surge después de haber fallado. La responsabilidad levinasiana es previa: nace del encuentro con el otro, no de un error cometido.'}] },
+  { titulo:'Nosotros / Vida en común (Garcés)', simple:'Cuando decimos "nosotros los chilenos amamos el asado", en realidad estamos diciendo "yo amo el asado y asumo que todos también". El "nosotros" se convierte en un yo gigante que habla por todos sin preguntarles. Garcés dice que ese es el problema: el nosotros moderno es <strong>falso</strong>. El nosotros real sería reconocer que somos diferentes pero que <strong>nos necesitamos</strong>.', completo:'Garcés, siguiendo a Benveniste, muestra que gramaticalmente "nosotros" es solo el plural de "yo", no un sujeto genuinamente colectivo. Cuando construimos colectividades a partir del yo como punto de partida, el nosotros siempre falla. La alternativa de Garcés es fundar el nosotros en la <em>interdependencia corporal</em>: los cuerpos son finitos y se continúan. Esta es una base material, no sentimental, del nosotros. La <em>"vida en común"</em> no es identidad colectiva ni sumisión: es el conjunto de vínculos que hacen posible existir.', analogia:'Un coro donde el director canta solo y todos hacen mímica es un "yo dilatado". Un coro donde cada voz es necesaria porque las otras no pueden hacer lo que ella hace es "vida en común".', faqs:[{p:'¿Nosotros siempre es un yo dilatado?',r:'No necesariamente. Garcés propone refundar el nosotros desde la finitud corporal e interdependencia. La crítica es al nosotros tal como opera en la modernidad occidental.'},{p:'¿La vida en común elimina la individualidad?',r:'No. La "vida en común" de Garcés preserva la singularidad dentro del vínculo. No es colectivismo: es reconocer que el yo necesita del nosotros para existir.'}] },
+  { titulo:'Interdependencia', simple:'Intenta hacer algo completamente solo, sin usar nada que haya creado o pensado otra persona. No puedes: el lenguaje que usas para pensar lo aprendiste de otros. La ropa que llevas la hicieron otros. La comida que comes la cultivaron otros. Eso es la interdependencia: <strong>no es que seamos débiles, es que somos seres que nos necesitamos estructuralmente</strong>.', completo:'Garcés lo formula radicalmente: la <em>finitud del cuerpo</em> es la base de la interdependencia. "Lo que no sabe mi cerebro, lo sabe el de otro. Lo que no veo a mi espalda alguien lo percibe desde otro ángulo." No es solo que nos ayudemos circunstancialmente: es que somos seres <em>incompletos constitutivamente</em>. La marca del ombligo lo recuerda: nacemos ligados a otro. La interdependencia <em>no nos separa ni nos convierte en iguales</em>: nos continúa a través de la diferencia.', analogia:'Como las piezas de un puzzle: cada pieza es irreductiblemente diferente a las otras (alteridad) y al mismo tiempo solo tiene sentido en relación con las demás (interdependencia).', faqs:[{p:'¿Admitir interdependencia significa ser menos autónomo?',r:'No. Puedes ser profundamente autónomo en tus decisiones y al mismo tiempo reconocer que esa autonomía se construyó con el apoyo material y simbólico de otros.'},{p:'¿La interdependencia es lo mismo que la amistad o la solidaridad?',r:'No exactamente. La interdependencia es estructural y previa a la elección: no depende de si quiero ser solidario. La solidaridad y la amistad son formas de responder a esa interdependencia.'}] },
+  { titulo:'Individualismo', simple:'El individualismo dice: "yo soy la unidad básica de todo. La sociedad es solo un grupo de individuos que se juntan por conveniencia." Garcés y Lévinas dicen: eso es una mentira filosófica. No puedes ser solo un individuo: el lenguaje, el afecto, el cuerpo te gritan que existes <strong>en relación</strong>.', completo:'El individualismo moderno surge en el siglo XVII con el <em>contractualismo</em>: la sociedad es un artificio creado por voluntades individuales. Esto tiene consecuencias profundas: el nosotros siempre parece artificial, y la alteridad del otro se reduce porque el otro es visto como rival o socio, no como alguien que me constituye. Garcés llama a esto <em>"privatización de la existencia"</em>: incluso lo colectivo se vuelve privado. Paradójicamente, la <em>política de identidad</em> (Peña) reproduce el individualismo a escala grupal.', analogia:'Como creer que las notas musicales pueden existir de forma aislada y que la melodía es solo una suma de notas. Garcés diría: la melodía (el nosotros) no es suma de notas (individuos): es la relación misma.', faqs:[{p:'¿Es malo el individualismo?',r:'No necesariamente en todos sus aspectos. El individualismo tiene logros reales: derechos humanos, libertades personales. El problema es cuando se convierte en el único marco de interpretación de la realidad.'},{p:'¿Críticar el individualismo implica defender el colectivismo?',r:'No. Garcés critica el individualismo pero no propone colectivismo. Propone la "vida en común" que preserva la singularidad dentro del vínculo.'}] },
+  { titulo:'Identidad', simple:'La identidad no es algo que tienes de nacimiento como una etiqueta fija. Es algo que se va construyendo en relación con los demás. Por eso, si eliminas a todos los otros de tu vida, no te vuelves más "tú mismo": te vuelves nadie. <strong>La identidad necesita del otro para existir</strong>.', completo:'Para Charles <em>Taylor</em>, la identidad es fundamentalmente <em>dialógica</em>: nos convertimos en quienes somos en diálogo con "otros significativos". No hay identidad sin alteridad. La identidad tampoco es fija: es un proceso continuo de construcción en relación. Carlos <em>Peña</em> vincula la identidad a la política: la <em>"política de la identidad"</em> hace del reconocimiento de las diferencias grupales el centro del debate político. El riesgo es que al hacer de la identidad el único lenguaje político, se fragmente la posibilidad de construir algo común.', analogia:'Como aprender a hablar: no aprendes solo. Aprendes en relación con personas que te hablan, te corrigen, te responden. Sin esos otros, no aprendes el lenguaje. La identidad es así.', faqs:[{p:'¿La identidad es individual o colectiva?',r:'Las dos cosas a la vez. Se construye individualmente (soy yo quien toma decisiones) pero a partir de materiales colectivos (lenguaje, cultura, relaciones). No son opuestos.'},{p:'¿La política de identidad es necesariamente mala?',r:'Peña no dice eso. Dice que tiene un riesgo: cuando la identidad grupal desplaza completamente el bien común universal. Hay algo legítimo en que los grupos históricamente oprimidos reivindiquen su identidad.'}] },
+  { titulo:'Gran Otro / Pequeño otro (Lacan)', simple:'Lacan dice que hay dos tipos de "otro". El <strong>pequeño otro</strong> es la persona real frente a mí (mi amigo, mi rival, la persona que me habla). El <strong>gran Otro</strong> es más raro: es el lenguaje mismo, las reglas sociales, la cultura. Cuando aprendes a hablar, a obedecer reglas, a querer cosas: estás siendo formado por el gran Otro.', completo:'En Lacan (influenciado por Saussure), el <em>gran Otro (Autre)</em> es el orden simbólico: el lenguaje, la ley, la cultura que me precede y me constituye como sujeto. No somos dueños del lenguaje: el lenguaje nos habla antes de que nosotros hablemos. El <em>pequeño otro (autre)</em> es la dimensión imaginaria: el espejo, el semejante, la rivalidad. Esto muestra que hay una <em>alteridad radical en el lenguaje mismo</em> que me constituye: nunca soy completamente dueño de mi propio pensamiento porque está estructurado por un Otro que me precede.', analogia:'El gran Otro es como el agua en que nadas: no la ves, pero te constituye y te mueve. El pequeño otro es el pez que ves nadar a tu lado.', faqs:[{p:'¿El gran Otro es lo mismo que Dios?',r:'Lacan juega con esa idea, pero técnicamente el gran Otro es el orden simbólico (lenguaje, ley). No es una persona ni una entidad sobrenatural, aunque en algunas culturas el lenguaje religioso ocupa esa función.'},{p:'¿El Otro de Lacan y el Otro de Lévinas son lo mismo?',r:'No. Para Lacan, el gran Otro es el lenguaje/cultura que me constituye internamente. Para Lévinas, el Otro es la persona concreta que me interpela desde afuera. Ambos muestran que el yo es relacional, pero por caminos distintos.'}] },
+  { titulo:'El otro en la era digital (Byung-Chul Han)', simple:'Cuando solo ves en TikTok lo que ya te gusta, sigues solo cuentas con las que estás de acuerdo, y bloqueas al que piensa diferente... Han diría que has <strong>eliminado al "otro" de tu vida</strong>. Vives en un espejo gigante donde todo te devuelve tu propia imagen. Y sin un verdadero otro, no puede haber ética.', completo:'Han diagnostica que la <em>sociedad del rendimiento</em> y la digitalización producen la desaparición del otro como alteridad genuina. Los <em>algoritmos optimizan</em> para darte lo que ya quieres. La <em>"transparencia" digital</em> elimina el misterio y la opacidad del otro. El amor mismo, dice Han, requiere la negatividad del otro: lo que me incomoda, lo que no comprendo. Sin eso, solo hay consumo narcisista. Han no es simplemente pesimista: propone una <em>ética de la contemplación y el silencio</em> como resistencia a la lógica del rendimiento.', analogia:'Como vivir en una casa con paredes de espejo: puedes ver miles de imágenes pero todas son tuyas. No hay ningún verdadero otro, solo reflejos de ti mismo multiplicados.', faqs:[{p:'¿Han dice que la tecnología es mala?',r:'No exactamente. Han hace un diagnóstico del uso que hacemos de la tecnología y de las estructuras que nos impone. No rechaza la tecnología en abstracto.'},{p:'¿Es posible encontrar al otro genuino en redes sociales?',r:'Han diría que es difícil porque las plataformas están diseñadas para reducir la fricción y la incomodidad. Pero no imposible: depende del uso que hagamos y de si buscamos activamente lo diferente.'}] },
+  { titulo:'Política de identidad (Carlos Peña)', simple:'Antes, en política se discutía principalmente sobre economía y derechos universales. Ahora, cada grupo dice: "lo importante es mi identidad (mi raza, mi género, mi orientación sexual)". Peña dice que eso tiene algo legítimo pero también un <strong>riesgo: que no podamos construir nada en común</strong> porque solo hablamos de nuestras diferencias.', completo:'Peña (siguiendo a Fukuyama) describe un tránsito: de la <em>democracia liberal</em> —donde la identidad personal era irrelevante y el debate giraba en torno a economía y derechos universales— a la <em>política de identidad</em>, donde lo identitario coloniza todo el espacio público. El riesgo que señala Peña: esta dinámica acentúa las diferencias entre grupos, debilita el <em>universalismo</em> y dificulta la construcción de un <em>bien común</em>. Paradójicamente, la política de identidad puede reproducir el individualismo, pero a escala grupal: en lugar de "yo primero", es "mi grupo primero".', analogia:'Como una reunión de trabajo donde cada persona solo habla de sus propias necesidades y nadie escucha a los demás ni busca un acuerdo. La política de identidad puede crear ese problema a escala social.', faqs:[{p:'¿Peña está en contra de los derechos de las minorías?',r:'No. Peña reconoce que hay algo legítimo en que grupos históricamente oprimidos reivindiquen sus derechos. Su crítica es que cuando la identidad se convierte en el único lenguaje político, se destruye la posibilidad de construir un espacio político compartido.'},{p:'¿Cómo se relaciona con Lévinas?',r:'Paradójicamente, la política de identidad puede reducir la alteridad: mi grupo se convierte en todo, y el otro (fuera del grupo) se convierte en amenaza. Esto sería exactamente lo que Lévinas critica: negar el rostro del otro que no pertenece a "mi grupo".'}] },
+];
+
+function buildNE(){
+  const cont=document.getElementById('ne-container');
+  neData.forEach((item,i)=>{
+    const div=document.createElement('div');
+    div.className='ne-card';
+    div.innerHTML=`
+      <div class="ne-header" onclick="toggleNE(${i})">
+        <div class="ne-title">🔍 ${item.titulo}</div>
+        <span class="ne-toggle" id="ne-tog-${i}">▼</span>
+      </div>
+      <div class="ne-body" id="ne-body-${i}">
+        <div class="ne-block">
+          <div class="ne-label">Explicación simple</div>
+          <div class="ne-text">${item.simple}</div>
+        </div>
+        <div class="ne-block">
+          <div class="ne-label">Explicación completa y diferente</div>
+          <div class="ne-text">${item.completo}</div>
+        </div>
+        <div class="ne-analogy"><strong>Analogía:</strong> ${item.analogia}</div>
+        <div class="ne-block">
+          <div class="ne-label">Preguntas frecuentes</div>
+          ${item.faqs.map(f=>`<div class="faq-item"><div class="faq-q">❓ ${f.p}</div><div class="faq-a">${f.r}</div></div>`).join('')}
+        </div>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+function toggleNE(i){
+  const body=document.getElementById(`ne-body-${i}`);
+  const tog=document.getElementById(`ne-tog-${i}`);
+  const open=body.classList.toggle('open');
+  tog.classList.toggle('open',open);
+}
+buildNE();
+
+// ═══════════════════════════════════════
+// FLASHCARDS
+// ═══════════════════════════════════════
+let flashcards = [
+  { tag:'Concepto', q:'¿Qué es la alteridad?', a:'La condición de ser radicalmente otro, irreductible a las categorías del yo. El otro nunca puede ser completamente comprendido ni reducido a mi mundo. Para Lévinas, esta irreductibilidad es el fundamento de la ética.' },
+  { tag:'Lévinas', q:'¿Qué es el "rostro" para Lévinas?', a:'No es la cara física. Es la manifestación ética del otro que me interpela y me dice "no me mates". Genera responsabilidad infinita antes de cualquier decisión racional.' },
+  { tag:'Lévinas', q:'¿Qué significa "ética como filosofía primera"?', a:'Que la relación ética con el otro es más fundamental que cualquier pregunta sobre el ser (ontología). La ética antecede, no sigue, al conocimiento teórico.' },
+  { tag:'Garcés', q:'¿Por qué es "imposible ser solo un individuo"?', a:'Porque la finitud del cuerpo nos hace constitutivamente interdependientes. El lenguaje, el afecto, el hambre, el ombligo: todo nos muestra que existimos en relación. "Donde no llega mi mano, llega la de otro."' },
+  { tag:'Garcés', q:'¿Diferencia entre nosotros como "yo dilatado" y "vida en común"?', a:'El nosotros como yo dilatado es solo una primera persona amplificada, con todas sus aporías (solipsismo, fracaso comunicativo). La vida en común es la dimensión real y compartida de la existencia: relaciones materiales y simbólicas que hacen posible vivir.' },
+  { tag:'Lacan', q:'¿Diferencia entre gran Otro y pequeño otro?', a:'El gran Otro (Autre) es el orden simbólico: el lenguaje, la cultura, la ley que me precede y me constituye. El pequeño otro (autre) es el semejante imaginario, el otro concreto con quien me relaciono.' },
+  { tag:'Han', q:'¿Por qué Han dice que "el otro ya no existe" en la era digital?', a:'Porque los algoritmos de redes sociales nos muestran solo lo que confirma nuestras creencias. No hay encuentro con lo genuinamente diferente. Solo encontramos versiones multiplicadas de nosotros mismos: narcisismo digital.' },
+  { tag:'Peña', q:'¿Cuál es el riesgo de la política de identidad según Carlos Peña?', a:'Que acentúe las diferencias grupales por sobre el bien común y el universalismo. Paradójicamente, puede ser un individualismo a escala grupal: "nosotros" (el grupo) contra "ellos".' },
+  { tag:'Diferencias', q:'¿En qué difieren Lévinas y Lacan al usar el término "Otro"?', a:'Lévinas: el Otro es la persona concreta que me interpela desde afuera y me genera responsabilidad ética. Lacan: el gran Otro es el lenguaje/orden simbólico que me constituye internamente como sujeto.' },
+  { tag:'Aplicación', q:'¿Cómo se aplica la alteridad al bullying?', a:'El bullying es la negación del rostro del otro: se cosifica al agredido. Desde Lévinas, reconocer el rostro del otro genera la obligación ética de no dañarlo, antes de cualquier norma escolar.' },
+  { tag:'Error común', q:'¿Cuál es el error más común al entender la "responsabilidad" en Lévinas?', a:'Creer que es recíproca o elegida. Para Lévinas, la responsabilidad es asimétrica (no depende de que el otro me cuide), infinita (no tiene límites), y es previa a mi decisión: el otro me hace responsable antes de que yo lo elija.' },
+  { tag:'Prueba', q:'¿Qué diferencia la alteridad de la simple tolerancia o diversidad?', a:'La tolerancia puede ser paternalista. La diversidad es descriptiva. La alteridad es filosófica y ética: el otro me exige responsabilidad activa, no solo aceptación pasiva. El otro me constituye.' },
+  { tag:'Cita', q:'"Donde no llega mi mano, llega la de otro." ¿Qué significa? (Garcés)', a:'Que la finitud de los cuerpos no nos separa: nos conecta. Lo que yo no puedo hacer, otro puede hacerlo. Esta complementariedad es la estructura de la existencia humana, base de la solidaridad real.' },
+  { tag:'Ética', q:'¿Qué es la ética para esta unidad?', a:'La rama de la filosofía que medita sobre lo correcto e incorrecto. Desde Lévinas, no nace de reglas abstractas sino del encuentro concreto con el rostro del otro que me interpela.' },
+  { tag:'Prueba', q:'¿Cómo conectar Garcés con Lévinas en una respuesta?', a:'Garcés da el marco ontológico-social (interdependencia, vida en común, crítica al individualismo). Lévinas da el marco ético (responsabilidad por el rostro, ética como filosofía primera). Juntos: el yo necesita al otro para ser, y eso genera obligaciones éticas.' },
+  { tag:'Contingencia', q:'Aplica la alteridad a la migración en Chile.', a:'La reacción xenófoba niega el rostro del migrante (Lévinas: cosificación). La política de identidad (Peña) puede agravar esto. Desde Garcés: la interdependencia obliga a ver en el migrante una extensión del "nosotros".' },
+  { tag:'Concepto', q:'¿Qué es la interdependencia para Garcés?', a:'La condición estructural por la cual los seres humanos se necesitan mutuamente para existir. No es elegida: nace de la finitud del cuerpo. "Lo que no sabe mi cerebro, lo sabe el de otro."' },
+  { tag:'Concepto', q:'¿Qué es la "privatización de la existencia" en Garcés?', a:'El proceso por el cual la modernidad individualista convierte incluso lo colectivo en privado. Los vínculos sociales se debilitan, el individuo se percibe como autosuficiente y el nosotros se vuelve imposible.' },
+  { tag:'Lévinas', q:'¿Por qué la responsabilidad en Lévinas es "asimétrica"?', a:'Porque no depende de reciprocidad. No es "yo te cuido porque tú me cuidas". El otro me genera obligación independientemente de lo que haga. La asimetría es radical: soy responsable incluso de la responsabilidad del otro.' },
+  { tag:'Han', q:'¿Qué es la "sociedad del rendimiento" para Han?', a:'Una sociedad en que cada individuo se autoexplota buscando optimizarse y producir más. Esta lógica elimina el tiempo y el espacio para el encuentro genuino con el otro.' },
+  { tag:'Lacan', q:'¿Qué es el "gran Otro" en Lacan y por qué importa para la alteridad?', a:'Es el orden simbólico (lenguaje, cultura, ley) que me constituye como sujeto antes de que yo decida nada. Importa porque muestra que la alteridad no es solo externa: hay un Otro que me habita internamente.' },
+  { tag:'Prueba', q:'¿Cuáles son los 3 pasos del argumento ético de Lévinas?', a:'(1) El rostro del otro me interpela: dice "no me mates". (2) Esta interpelación genera responsabilidad infinita y asimétrica. (3) Por tanto, la ética es la "filosofía primera": antecede a cualquier pregunta teórica.' },
+  { tag:'Prueba', q:'¿Cuáles son los 2 argumentos principales de Garcés?', a:'(1) El nosotros como "yo dilatado" fracasa: arrastra solipsismo y fracasos comunicativos. (2) La finitud del cuerpo funda una interdependencia real: los cuerpos se continúan mutuamente.' },
+  { tag:'Diferencias', q:'¿Qué diferencia la "vida en común" (Garcés) del colectivismo?', a:'La vida en común preserva la singularidad de cada persona dentro del vínculo. No exige uniformidad ni sumisión al todo. El colectivismo puede suprimir la individualidad; la vida en común no.' },
+  { tag:'Error común', q:'¿Cuál es el error más común al entender el "nosotros" de Garcés?', a:'Creer que propone un colectivismo que borra al individuo. En realidad, Garcés critica el nosotros como yo dilatado y propone un nosotros basado en la interdependencia que respeta la singularidad.' },
+];
+
+let fcIndex=0,fcFlipped=false;
+function renderCard(){
+  const c=flashcards[fcIndex];
+  document.getElementById('fc-tag').textContent=c.tag;
+  document.getElementById('fc-question').textContent=c.q;
+  document.getElementById('fc-answer').textContent=c.a;
+  document.getElementById('fc-current').textContent=fcIndex+1;
+  document.getElementById('fc-total').textContent=flashcards.length;
+  document.getElementById('current-card').classList.remove('flipped');
+  fcFlipped=false;
+}
+function flipCard(){const el=document.getElementById('current-card');fcFlipped=!fcFlipped;el.classList.toggle('flipped',fcFlipped);}
+function nextCard(){fcIndex=(fcIndex+1)%flashcards.length;renderCard();}
+function prevCard(){fcIndex=(fcIndex-1+flashcards.length)%flashcards.length;renderCard();}
+function shuffleCards(){for(let i=flashcards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[flashcards[i],flashcards[j]]=[flashcards[j],flashcards[i]];}fcIndex=0;renderCard();}
+renderCard();
+
+// ═══════════════════════════════════════
+// RESTORE LAST SECTION
+// ═══════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  const last=localStorage.getItem('lastSection');
+  if(last){
+    const btn=Array.from(document.querySelectorAll('.nav-btn')).find(b=>b.getAttribute('onclick')?.includes(`'${last}'`));
+    if(btn)btn.click();
+  }
+});
+</script>
+</body>
+</html>
